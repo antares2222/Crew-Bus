@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Crew Bus — Setup</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600&family=DM+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#0a0a0a;color:#e8e8e8;font-family:'DM Sans',sans-serif;min-height:100vh;padding:0 0 60px}
+
+.header{background:#111318;border-bottom:1px solid #2a2d36;padding:20px 20px 16px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:#e8b84b}
+.logo span{color:#e8e8e8;font-size:16px}
+.subtitle{font-size:10px;color:#6b7280;letter-spacing:.5px;font-family:'DM Mono',monospace;margin-top:2px}
+
+.section{padding:20px}
+.slabel{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;color:#6b7280;margin-bottom:14px}
+.card{background:#1a1d24;border:1px solid #2a2d36;border-radius:12px;padding:16px;margin-bottom:14px}
+
+.step{display:flex;gap:14px;align-items:flex-start;margin-bottom:20px}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:#e8b84b;line-height:1;min-width:32px}
+.step-body{}
+.step-title{font-weight:600;font-size:14px;margin-bottom:4px}
+.step-desc{font-size:12px;color:#9ca3af;line-height:1.6}
+.step-desc code{font-family:'DM Mono',monospace;background:#111;padding:1px 5px;border-radius:3px;font-size:11px;color:#e8b84b}
+
+.bkm-box{background:#0a0a0a;border:1px solid #e8b84b;border-radius:10px;padding:14px 16px;margin-top:10px;cursor:pointer;position:relative}
+.bkm-label{font-size:10px;color:#e8b84b;letter-spacing:1px;font-family:'DM Mono',monospace;margin-bottom:6px}
+.bkm-link{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:#e8e8e8;display:flex;align-items:center;gap:10px}
+.bkm-emoji{font-size:24px}
+.bkm-hint{font-size:11px;color:#6b7280;margin-top:6px}
+
+.tip{background:rgba(232,184,75,.06);border:1px solid rgba(232,184,75,.2);border-radius:8px;padding:12px 14px;font-size:12px;color:#c9a33d;line-height:1.7;margin-top:12px}
+.tip strong{color:#e8b84b}
+
+.demo-btn{width:100%;padding:14px;border:none;border-radius:10px;background:#4be8a0;color:#0a0a0a;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;margin-top:4px}
+
+.fids-link{display:block;width:100%;padding:14px;border:1px solid #2a2d36;border-radius:10px;background:transparent;color:#e8e8e8;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;text-decoration:none;text-align:center;margin-top:8px}
+
+/* screen overlay styles injected via bookmarklet */
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">LGG <span>CREW BUS</span></div>
+  <div class="subtitle">LIÈGE AIRPORT — INSTALLATION DU BOOKMARKLET</div>
+</div>
+
+<div class="section">
+  <div class="slabel">COMMENT INSTALLER</div>
+
+  <div class="card">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Ouvre cette page dans Safari</div>
+        <div class="step-desc">Cette page doit être ouverte dans <strong>Safari</strong> sur ton iPhone. Partage-la si besoin avec les collègues.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Ajoute le lien en favori</div>
+        <div class="step-desc">Appuie longtemps sur le bouton ci-dessous → <code>Ajouter aux signets</code><br>Nomme-le <code>🛫 Crew Bus LGG</code></div>
+        <div class="bkm-box" id="bkmBox">
+          <div class="bkm-label">APPUI LONG → AJOUTER AUX SIGNETS</div>
+          <div class="bkm-link"><span class="bkm-emoji">🛫</span> Crew Bus LGG</div>
+          <div class="bkm-hint">Ce lien contient le script complet</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Va sur le FIDS Liège</div>
+        <div class="step-desc">Navigue vers <code>fids.liegeairport.com/spw</code> et attends que les vols soient chargés.</div>
+      </div>
+    </div>
+    <div class="step" style="margin-bottom:0">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Lance le bookmarklet</div>
+        <div class="step-desc">Dans Safari, appuie sur <code>⎘ Signets</code> → <code>🛫 Crew Bus LGG</code><br>L'interface s'ouvre, choisis le shift et génère la feuille.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 Astuce :</strong> Le bookmarklet fonctionne directement sur la page du FIDS — il lit les vols déjà affichés. Assure-toi que la page est chargée avant de l'activer.<br><br>
+    <strong>⚠️ Important :</strong> Le FIDS affiche arrivées et départs sur deux onglets séparés. Lance le bookmarklet <strong>une fois sur Arrivals</strong>, puis <strong>une fois sur Departures</strong>.
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="slabel">TESTER MAINTENANT</div>
+    <button class="demo-btn" onclick="runBookmarklet()">▶ TESTER SUR CETTE PAGE</button>
+    <a class="fids-link" href="https://fids.liegeairport.com/spw">🌐 OUVRIR LE FIDS LIÈGE</a>
+  </div>
+</div>
+
+<script>
+// ══ LE BOOKMARKLET COMPLET ════════════════════════════════════════
+// (même code exécuté depuis le favori)
+const BOOKMARKLET_CODE = (function() {
+
+const HANDLERS_LIST = ['WFS','CHALLENGE','SWISSPORT','BAS','FEDEX','AVIAPARTNER'];
+const AC_RE = /^(B7[0-9]{2}[LW]?|A3[0-9]{2}|B738|B763|B744|B748|A306|A332|A333|B734|B752|A321|B77[LW]|AT72|CRJ|E[0-9]{3})$/i;
+
+function resolveHandler(flight, raw) {
+  if (!raw) return '';
+  const r = raw.toUpperCase().trim();
+  if (['BAS','FEDEX','AVIAPARTNER'].includes(r)) return '';
+  if (r === 'SWISSPORT' && !flight.toUpperCase().startsWith('3V')) return '';
+  return raw.trim();
+}
+
+function pickupTime(t) {
+  const [h,m] = t.split(':').map(Number);
+  let x = h*60+m-75; if(x<0) x+=1440;
+  return String(Math.floor(x/60)%24).padStart(2,'0')+':'+String(x%60).padStart(2,'0');
+}
+
+function inWindow(t, shift) {
+  if (!t || !t.match(/^\d{1,2}:\d{2}$/)) return false;
+  const [h,m] = t.split(':').map(Number), mins = h*60+m;
+  if (shift==='NIGHT') return mins>=22*60 || mins<6*60;
+  if (shift==='EARLY') return mins>=6*60 && mins<14*60;
+  return mins>=14*60 && mins<22*60;
+}
+
+function extractRows(rows, type, shift) {
+  const res = [];
+  for (const row of rows) {
+    const cells = [...row.querySelectorAll('td, [class*="cell"]')];
+    if (!cells.length) continue;
+    const texts = cells.map(c=>(c.innerText||c.textContent||'').trim()).filter(Boolean);
+    const times = texts.filter(t=>/^\d{1,2}:\d{2}$/.test(t));
+    if (!times.length) continue;
+    const eta = times[times.length-1];
+    if (!inWindow(eta, shift)) continue;
+
+    const fullText = texts.join(' ').toUpperCase();
+    let hw = '';
+    for (const h of HANDLERS_LIST) { if(fullText.includes(h)){hw=h;break} }
+
+    let flight='';
+    for (const t of texts) {
+      if(/^[A-Z0-9]{2}[A-Z]?\d{3,5}[A-Z]?$/.test(t)&&!/^\d+$/.test(t)){flight=t;break}
+    }
+    if (!flight) continue;
+
+    let reg='';
+    for (const t of texts) {
+      if(t===flight) continue;
+      if(/^\d{1,2}:\d{2}$/.test(t)||/^\d{2}\//.test(t)) continue;
+      if(HANDLERS_LIST.includes(t.toUpperCase())||AC_RE.test(t)) continue;
+      if(/^\d+[A-Z]?$/.test(t)&&t.length<=4) continue;
+      if(/^[A-Z0-9]{4,8}$/.test(t)&&!/^\d+$/.test(t)&&t.length>=4){reg=t;break}
+    }
+
+    res.push({flight, reg, eta, time: type==='dep'?pickupTime(eta):eta, handler:resolveHandler(flight,hw), type});
+  }
+  return res;
+}
+
+function buildPrint(arrivals, departures, shift, dl) {
+  let rows = '';
+  arrivals.forEach(f=>{
+    rows+=`<tr><td class="r">${f.reg||''}</td><td class="a"><span class="ab">ARR</span></td><td class="p">Pick up</td><td class="t">${f.time}</td><td class="f">${f.flight}</td><td></td><td></td></tr>`;
+  });
+  if(arrivals.length&&departures.length) rows+=`<tr class="sep"><td colspan="7">— DÉPARTS —</td></tr>`;
+  departures.forEach(f=>{
+    rows+=`<tr><td class="r">${f.reg||''}</td><td class="a"><span class="ab dep">ARR</span></td><td class="p u">Pick up</td><td class="t">${f.time}</td><td class="f">${f.flight}</td><td></td><td></td></tr>`;
+  });
+  for(let i=0;i<5;i++) rows+=`<tr class="er"><td></td><td class="a"><span class="ab">ARR</span></td><td class="p">Pick up</td><td></td><td></td><td></td><td></td></tr>`;
+
+  const css = `*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:10pt;padding:12pt}
+  .ph{display:flex;align-items:stretch;border:1.5pt solid black;margin-bottom:0}
+  .ph-l{flex:1;padding:7pt 10pt;font-size:11pt;border-right:1pt solid black}
+  .ph-m{padding:7pt 18pt;font-size:11pt;font-weight:bold;text-align:center;white-space:nowrap;display:flex;align-items:center}
+  .ph-r{flex:1;padding:7pt 10pt}
+  table{width:100%;border-collapse:collapse}
+  th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
+  td{border:1pt solid black;padding:5pt 7pt;vertical-align:middle}
+  .r,.t,.f{font-size:13pt}.a{text-align:center;padding:3pt;width:5%}
+  .ab{display:inline-block;border:1pt solid black;padding:1pt 4pt;font-size:7pt;font-weight:bold;border-radius:2pt}
+  .ab.dep{background:#ffd0d0}.p{font-size:9pt;font-style:italic;width:8%}.p.u{text-decoration:underline}
+  .sep td{background:#efefef;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt}
+  .er{height:22pt}.pb{width:100%;border-collapse:collapse;margin-top:10pt}
+  .pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:3pt;font-variant:small-caps}
+  .pb td{border:1pt solid black;padding:4pt;height:20pt;vertical-align:middle}
+  .dv{background:black!important;width:4pt;padding:0;border:none}.sh{font-weight:bold;font-size:9pt;text-align:center;padding:5pt}
+  @media print{body{padding:6pt}@page{size:A4 portrait;margin:10mm}}`;
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${css}</style></head><body>
+  <div class="ph">
+    <div class="ph-l">Crew bus service &nbsp;&nbsp;&nbsp;${dl}</div>
+    <div class="ph-m">EARLY // LATE // <u><b>${shift}</b></u></div>
+    <div class="ph-r"></div>
+  </div>
+  <table><thead><tr>
+    <th style="width:19%">Registration</th>
+    <th colspan="3" style="width:25%">Time (Local)</th>
+    <th style="width:19%">Flight Number</th>
+    <th style="width:10%">Crew</th>
+    <th style="width:9%">Stand</th>
+  </tr></thead><tbody>${rows}</tbody></table>
+  <table class="pb">
+    <tr><td colspan="3" class="sh">Headset</td><td class="dv"></td><td colspan="4" class="sh">Handling</td></tr>
+    <tr><th style="width:16%">Registration</th><th style="width:14%">FLT #</th><th style="width:14%">Depart</th><td class="dv"></td><th style="width:14%">Registration</th><th style="width:12%">FLT #</th><th style="width:13%">DEP // ARR</th><th>Handling WFS</th></tr>
+    <tr><td></td><td></td><td></td><td class="dv"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="dv"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="dv"></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td class="dv"></td><td></td><td></td><td></td><td></td></tr>
+  </table>
+  <script>window.onload=function(){window.print()}<\/script>
+  </body></html>`;
+
+  // Écrire dans la page courante puis imprimer
+  document.open(); document.write(html); document.close(); window.print();
+}
+
+function showOverlay(shift, dateVal, onGenerate) {
+  const old = document.getElementById('_cb_ov'); if(old) old.remove();
+  const ov = document.createElement('div');
+  ov.id = '_cb_ov';
+  ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483647;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;font-family:-apple-system,Arial,sans-serif';
+
+  let selShift = shift || 'NIGHT';
+
+  ov.innerHTML = `
+  <div id="_cb_box" style="background:#111318;border:1px solid #2a2d36;border-radius:16px;padding:22px 20px;width:88%;max-width:320px;color:#e8e8e8">
+    <div style="font-size:20px;font-weight:800;letter-spacing:2px;color:#e8b84b;margin-bottom:2px">🛫 LGG CREW BUS</div>
+    <div style="font-size:9px;color:#6b7280;margin-bottom:18px;letter-spacing:1px;font-family:monospace">GÉNÉRATEUR DE FEUILLE — ${window.location.hostname}</div>
+    <div style="font-size:10px;color:#6b7280;letter-spacing:1px;margin-bottom:6px;font-family:monospace">DATE</div>
+    <input id="_cb_date" type="date" value="${new Date().toISOString().slice(0,10)}" style="width:100%;background:#0a0a0a;border:1px solid #2a2d36;border-radius:8px;color:#e8e8e8;font-family:monospace;font-size:14px;padding:10px 12px;outline:none;-webkit-appearance:none;margin-bottom:14px">
+    <div style="font-size:10px;color:#6b7280;letter-spacing:1px;margin-bottom:8px;font-family:monospace">SHIFT</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:16px" id="_cb_sgrid">
+      <button data-s="EARLY" style="border:1px solid #2a2d36;border-radius:8px;background:#0a0a0a;color:#6b7280;font-size:13px;font-weight:700;padding:11px 4px;cursor:pointer">EARLY<br><span style="font-size:9px;font-weight:400">06–14h</span></button>
+      <button data-s="LATE" style="border:1px solid #2a2d36;border-radius:8px;background:#0a0a0a;color:#6b7280;font-size:13px;font-weight:700;padding:11px 4px;cursor:pointer">LATE<br><span style="font-size:9px;font-weight:400">14–22h</span></button>
+      <button data-s="NIGHT" style="border:2px solid #e8b84b;border-radius:8px;background:rgba(232,184,75,0.08);color:#e8b84b;font-size:13px;font-weight:700;padding:11px 4px;cursor:pointer">NIGHT<br><span style="font-size:9px;font-weight:400">22–06h</span></button>
+    </div>
+    <div style="font-size:10px;color:#6b7280;letter-spacing:1px;margin-bottom:8px;font-family:monospace">JE SUIS SUR L'ONGLET</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px" id="_cb_tgrid">
+      <button data-t="arr" style="border:2px solid #4be8a0;border-radius:8px;background:rgba(75,232,160,0.08);color:#4be8a0;font-size:13px;font-weight:700;padding:11px 4px;cursor:pointer">✈ ARRIVALS</button>
+      <button data-t="dep" style="border:1px solid #2a2d36;border-radius:8px;background:#0a0a0a;color:#6b7280;font-size:13px;font-weight:700;padding:11px 4px;cursor:pointer">✈ DEPARTURES</button>
+    </div>
+    <div id="_cb_st" style="font-size:11px;color:#6b7280;margin-bottom:12px;min-height:14px;font-family:monospace"></div>
+    <button id="_cb_gen" style="width:100%;padding:13px;border:none;border-radius:10px;background:#4be8a0;color:#0a0a0a;font-size:15px;font-weight:800;letter-spacing:2px;cursor:pointer;margin-bottom:8px">🖨 GÉNÉRER LA FEUILLE</button>
+    <button id="_cb_cl" style="width:100%;padding:10px;border:1px solid #2a2d36;border-radius:10px;background:transparent;color:#6b7280;font-size:12px;cursor:pointer">FERMER</button>
+  </div>`;
+
+  document.body.appendChild(ov);
+
+  let selType = 'arr';
+
+  // Shift buttons
+  ov.querySelectorAll('[data-s]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selShift = btn.dataset.s;
+      ov.querySelectorAll('[data-s]').forEach(b => { b.style.border='1px solid #2a2d36'; b.style.color='#6b7280'; b.style.background='#0a0a0a'; });
+      btn.style.border='2px solid #e8b84b'; btn.style.color='#e8b84b'; btn.style.background='rgba(232,184,75,0.08)';
+    });
+  });
+
+  // Type buttons
+  ov.querySelectorAll('[data-t]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selType = btn.dataset.t;
+      ov.querySelectorAll('[data-t]').forEach(b => { b.style.border='1px solid #2a2d36'; b.style.color='#6b7280'; b.style.background='#0a0a0a'; });
+      const col = selType==='arr'?'#4be8a0':'#e84b4b';
+      btn.style.border=`2px solid ${col}`; btn.style.color=col; btn.style.background=`rgba(${selType==='arr'?'75,232,160':'232,75,75'},0.08)`;
+    });
+  });
+
+  // Generate
+  ov.querySelector('#_cb_gen').addEventListener('click', () => {
+    const st = ov.querySelector('#_cb_st');
+    const dateVal = ov.querySelector('#_cb_date').value;
+    const dl = dateVal ? dateVal.split('-').reverse().join('/') : new Date().toLocaleDateString('fr-BE');
+
+    st.style.color='#e8b84b'; st.textContent='⏳ Lecture des vols...';
+
+    setTimeout(() => {
+      const allTr = [...document.querySelectorAll('tr')].filter(r=>r.querySelectorAll('td').length>=3);
+      const flights = extractRows(allTr, selType, selShift);
+
+      if (!flights.length) {
+        st.style.color='#e84b4b';
+        st.textContent=`⚠ Aucun vol trouvé (shift ${selShift}). Vérifie l'onglet FIDS.`;
+        return;
+      }
+
+      st.style.color='#4be8a0';
+      st.textContent=`✓ ${flights.length} vol(s) trouvé(s) — génération...`;
+
+      const arrivals = selType==='arr' ? flights : [];
+      const departures = selType==='dep' ? flights : [];
+
+      setTimeout(() => {
+        ov.remove();
+        buildPrint(arrivals, departures, selShift, dl);
+      }, 600);
+    }, 200);
+  });
+
+  ov.querySelector('#_cb_cl').addEventListener('click', () => ov.remove());
+}
+
+return {showOverlay, extractRows, buildPrint, inWindow, resolveHandler, pickupTime};
+})();
+
+// ══ LANCER ════════════════════════════════════════════════════════
+function runBookmarklet() {
+  BOOKMARKLET_CODE.showOverlay('NIGHT', new Date().toISOString().slice(0,10));
+}
+
+// ══ CRÉER LE HREF DU BOOKMARKLET ══════════════════════════════════
+// Le bookmarklet charge ce fichier et exécute runBookmarklet
+// Comme on ne peut pas héberger, on met le code inline minifié dans le href
+window.addEventListener('load', () => {
+  const miniCode = `(function(){
+var HL=['WFS','CHALLENGE','SWISSPORT','BAS','FEDEX','AVIAPARTNER'];
+var AC=/^(B7[0-9]{2}[LW]?|A3[0-9]{2}|B738|B763|B744|B748|A306|A332|A333|B734|B752|A321|B77[LW]|AT72|CRJ|E[0-9]{3})$/i;
+function rH(fl,r){if(!r)return'';var x=r.toUpperCase().trim();if(['BAS','FEDEX','AVIAPARTNER'].includes(x))return'';if(x==='SWISSPORT'&&!fl.toUpperCase().startsWith('3V'))return'';return r.trim();}
+function pT(t){var p=t.split(':').map(Number),x=p[0]*60+p[1]-75;if(x<0)x+=1440;return String(Math.floor(x/60)%24).padStart(2,'0')+':'+String(x%60).padStart(2,'0');}
+function iW(t,s){if(!t||!/\\d:\\d/.test(t))return false;var p=t.split(':').map(Number),m=p[0]*60+p[1];if(s==='NIGHT')return m>=1320||m<360;if(s==='EARLY')return m>=360&&m<840;return m>=840&&m<1320;}
+function exR(rows,tp,sh){var res=[];for(var row of rows){var cells=[...row.querySelectorAll('td,[class*=cell]')];if(!cells.length)continue;var tx=cells.map(c=>(c.innerText||c.textContent||'').trim()).filter(Boolean);var ti=tx.filter(t=>/^\\d{1,2}:\\d{2}$/.test(t));if(!ti.length)continue;var eta=ti[ti.length-1];if(!iW(eta,sh))continue;var ft=tx.join(' ').toUpperCase(),hw='';for(var h of HL){if(ft.includes(h)){hw=h;break}}var fl='';for(var t of tx){if(/^[A-Z0-9]{2}[A-Z]?\\d{3,5}[A-Z]?$/.test(t)&&!/^\\d+$/.test(t)){fl=t;break}}if(!fl)continue;var rg='';for(var t of tx){if(t===fl||/^\\d{1,2}:\\d{2}$/.test(t)||/^\\d{2}\\//.test(t)||HL.includes(t.toUpperCase())||AC.test(t)||(/^\\d+[A-Z]?$/.test(t)&&t.length<=4))continue;if(/^[A-Z0-9]{4,8}$/.test(t)&&!/^\\d+$/.test(t)&&t.length>=4){rg=t;break}}res.push({fl,rg,eta,tm:tp==='dep'?pT(eta):eta,hd:rH(fl,hw),tp});}return res;}
+function bP(arr,dep,sh,dl){var rows='';arr.forEach(f=>{rows+='<tr><td class=r>'+f.rg+'</td><td class=a><span class=ab>ARR</span></td><td class=p>Pick up</td><td class=t>'+f.tm+'</td><td class=f>'+f.fl+'</td><td></td><td></td></tr>';});if(arr.length&&dep.length)rows+='<tr class=sep><td colspan=7>— DÉPARTS —</td></tr>';dep.forEach(f=>{rows+='<tr><td class=r>'+f.rg+'</td><td class=a><span class="ab dep">ARR</span></td><td class="p u">Pick up</td><td class=t>'+f.tm+'</td><td class=f>'+f.fl+'</td><td></td><td></td></tr>';});for(var i=0;i<5;i++)rows+='<tr class=er><td></td><td class=a><span class=ab>ARR</span></td><td class=p>Pick up</td><td></td><td></td><td></td><td></td></tr>';
+var css='*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:10pt;padding:12pt}.ph{display:flex;align-items:stretch;border:1.5pt solid black;margin-bottom:0}.ph-l{flex:1;padding:7pt 10pt;font-size:11pt;border-right:1pt solid black}.ph-m{padding:7pt 18pt;font-size:11pt;font-weight:bold;text-align:center;white-space:nowrap;display:flex;align-items:center}.ph-r{flex:1;padding:7pt 10pt}table{width:100%;border-collapse:collapse}th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}td{border:1pt solid black;padding:5pt 7pt;vertical-align:middle}.r,.t,.f{font-size:13pt}.a{text-align:center;padding:3pt;width:5%}.ab{display:inline-block;border:1pt solid black;padding:1pt 4pt;font-size:7pt;font-weight:bold;border-radius:2pt}.ab.dep{background:#ffd0d0}.p{font-size:9pt;font-style:italic;width:8%}.p.u{text-decoration:underline}.sep td{background:#efefef;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt}.er{height:22pt}.pb{width:100%;border-collapse:collapse;margin-top:10pt}.pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:3pt;font-variant:small-caps}.pb td{border:1pt solid black;padding:4pt;height:20pt;vertical-align:middle}.dv{background:black!important;width:4pt;padding:0;border:none}.sh{font-weight:bold;font-size:9pt;text-align:center;padding:5pt}@media print{body{padding:6pt}@page{size:A4 portrait;margin:10mm}}';
+var html='<!DOCTYPE html><html><head><meta charset=UTF-8><style>'+css+'</style></head><body><div class=ph><div class=ph-l>Crew bus service &nbsp;&nbsp;&nbsp;'+dl+'</div><div class=ph-m>EARLY // LATE // <u><b>'+sh+'</b></u></div><div class=ph-r></div></div><table><thead><tr><th style=width:19%>Registration</th><th colspan=3 style=width:25%>Time (Local)</th><th style=width:19%>Flight Number</th><th style=width:10%>Crew</th><th style=width:9%>Stand</th></tr></thead><tbody>'+rows+'</tbody></table><table class=pb><tr><td colspan=3 class=sh>Headset</td><td class=dv></td><td colspan=4 class=sh>Handling</td></tr><tr><th style=width:16%>Registration</th><th style=width:14%>FLT #</th><th style=width:14%>Depart</th><td class=dv></td><th style=width:14%>Registration</th><th style=width:12%>FLT #</th><th style=width:13%>DEP // ARR</th><th>Handling WFS</th></tr><tr><td></td><td></td><td></td><td class=dv></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td class=dv></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td class=dv></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td class=dv></td><td></td><td></td><td></td><td></td></tr></table><script>window.onload=function(){window.print()}<\/script></body></html>';
+document.open();document.write(html);document.close();window.print();}
+function showOv(){var old=document.getElementById('_cbov');if(old)old.remove();var ov=document.createElement('div');ov.id='_cbov';ov.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483647;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;font-family:-apple-system,Arial,sans-serif';var ss='NIGHT',st='arr';
+ov.innerHTML='<div style="background:#111318;border:1px solid #2a2d36;border-radius:16px;padding:22px 20px;width:88%;max-width:320px;color:#e8e8e8"><div style="font-size:20px;font-weight:800;letter-spacing:2px;color:#e8b84b;margin-bottom:2px">🛫 LGG CREW BUS</div><div style="font-size:9px;color:#6b7280;margin-bottom:16px;font-family:monospace">GÉNÉRATEUR DE FEUILLE</div><div style="font-size:10px;color:#6b7280;letter-spacing:1px;margin-bottom:5px;font-family:monospace">DATE</div><input id="_cb_d" type="date" style="width:100%;background:#0a0a0a;border:1px solid #2a2d36;border-radius:8px;color:#e8e8e8;font-family:monospace;font-size:14px;padding:10px 12px;outline:none;-webkit-appearance:none;margin-bottom:14px"><div style="font-size:10px;color:#6b7280;letter-spacing:1px;margin-bottom:7px;font-family:monospace">SHIFT</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:14px"><button data-s="EARLY" style="border:1px solid #2a2d36;border-radius:8px;background:#0a0a0a;color:#6b7280;font-size:13px;font-weight:700;padding:11px 4px;cursor:pointer">EARLY<br><span style=font-size:9px;font-weight:400>06-14h</span></button><button data-s="LATE" style="border:1px solid #2a2d36;border-radius:8px;background:#0a0a0a;color:#6b7280;font-size:13px;font-weight:700;padding:11px 4px;cursor:pointer">LATE<br><span style=font-size:9px;font-weight:400>14-22h</span></button><button data-s="NIGHT" style="border:2px solid #e8b84b;border-radius:8px;background:rgba(232,184,75,.08);color:#e8b84b;font-size:13px;font-weight:700;padding:11px 4px;cursor:pointer">NIGHT<br><span style=font-size:9px;font-weight:400>22-06h</span></button></div><div style="font-size:10px;color:#6b7280;letter-spacing:1px;margin-bottom:7px;font-family:monospace">JE SUIS SUR L ONGLET</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px"><button data-t="arr" style="border:2px solid #4be8a0;border-radius:8px;background:rgba(75,232,160,.08);color:#4be8a0;font-size:13px;font-weight:700;padding:11px 4px;cursor:pointer">✈ ARRIVALS</button><button data-t="dep" style="border:1px solid #2a2d36;border-radius:8px;background:#0a0a0a;color:#6b7280;font-size:13px;font-weight:700;padding:11px 4px;cursor:pointer">✈ DEPARTURES</button></div><div id="_cb_st" style="font-size:11px;color:#6b7280;margin-bottom:12px;min-height:14px;font-family:monospace"></div><button id="_cb_g" style="width:100%;padding:13px;border:none;border-radius:10px;background:#4be8a0;color:#0a0a0a;font-size:15px;font-weight:800;letter-spacing:2px;cursor:pointer;margin-bottom:8px">🖨 GÉNÉRER</button><button id="_cb_c" style="width:100%;padding:10px;border:1px solid #2a2d36;border-radius:10px;background:transparent;color:#6b7280;font-size:12px;cursor:pointer">FERMER</button></div>';
+document.body.appendChild(ov);
+document.getElementById('_cb_d').value=new Date().toISOString().slice(0,10);
+ov.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>{ss=b.dataset.s;ov.querySelectorAll('[data-s]').forEach(x=>{x.style.border='1px solid #2a2d36';x.style.color='#6b7280';x.style.background='#0a0a0a';});b.style.border='2px solid #e8b84b';b.style.color='#e8b84b';b.style.background='rgba(232,184,75,.08)';}));
+ov.querySelectorAll('[data-t]').forEach(b=>b.addEventListener('click',()=>{st=b.dataset.t;ov.querySelectorAll('[data-t]').forEach(x=>{x.style.border='1px solid #2a2d36';x.style.color='#6b7280';x.style.background='#0a0a0a';});var c=st==='arr'?'#4be8a0':'#e84b4b',bg=st==='arr'?'rgba(75,232,160,.08)':'rgba(232,75,75,.08)';b.style.border='2px solid '+c;b.style.color=c;b.style.background=bg;}));
+document.getElementById('_cb_g').addEventListener('click',()=>{var el=document.getElementById('_cb_st'),dv=document.getElementById('_cb_d').value,dl=dv?dv.split('-').reverse().join('/'):'';el.style.color='#e8b84b';el.textContent='⏳ Lecture...';setTimeout(()=>{var rows=[...document.querySelectorAll('tr')].filter(r=>r.querySelectorAll('td').length>=3);var fl=exR(rows,st,ss);if(!fl.length){el.style.color='#e84b4b';el.textContent='⚠ Aucun vol (shift '+ss+'). Vérifie le FIDS.';return;}el.style.color='#4be8a0';el.textContent='✓ '+fl.length+' vol(s) — génération...';var ar=st==='arr'?fl:[],dp=st==='dep'?fl:[];setTimeout(()=>{ov.remove();bP(ar,dp,ss,dl);},500);},200);});
+document.getElementById('_cb_c').addEventListener('click',()=>ov.remove());}
+showOv();})();`;
+
+  // Encoder pour href bookmarklet
+  const encoded = 'javascript:' + encodeURIComponent(miniCode);
+  document.getElementById('bkmBox').setAttribute('href', encoded);
+  // Le div n'a pas de href, on crée un vrai <a>
+  const a = document.createElement('a');
+  a.href = encoded;
+  a.style.cssText = 'display:block;text-decoration:none';
+  a.innerHTML = document.getElementById('bkmBox').innerHTML;
+  a.id = 'bkmLink';
+  document.getElementById('bkmBox').replaceWith(a);
+});
+</script>
+</body>
+</html>
