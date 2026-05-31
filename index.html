@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Crew Bus — LGG</title>
-<script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;600&family=DM+Mono:wght@400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -23,7 +22,7 @@ body{background:#0a0a0a;color:#e8e8e8;font-family:'DM Sans',sans-serif;min-heigh
 label{display:block;font-size:10px;color:#6b7280;letter-spacing:1px;margin-bottom:6px;font-family:'DM Mono',monospace}
 input[type=date]{width:100%;background:#0a0a0a;border:1px solid #2a2d36;border-radius:8px;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:14px;padding:11px 12px;outline:none;-webkit-appearance:none}
 input:focus{border-color:#e8b84b}
-textarea{width:100%;background:#0a0a0a;border:1px solid #2a2d36;border-radius:8px;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:12px;padding:12px;outline:none;resize:none;min-height:160px;line-height:1.7}
+textarea{width:100%;background:#0a0a0a;border:1px solid #2a2d36;border-radius:8px;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:12px;padding:12px;outline:none;resize:none;min-height:220px;line-height:1.7}
 textarea:focus{border-color:#e8b84b}
 .sgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .sbtn{border:1px solid #2a2d36;border-radius:8px;background:#0a0a0a;color:#6b7280;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;padding:13px 4px;cursor:pointer;width:100%;text-align:center;transition:all .2s}
@@ -37,7 +36,7 @@ textarea:focus{border-color:#e8b84b}
 .tip{background:rgba(232,184,75,.06);border:1px solid rgba(232,184,75,.2);border-radius:8px;padding:12px 14px;font-size:12px;color:#c9a33d;line-height:1.7;margin-bottom:12px}
 .tip strong{color:#e8b84b}
 .info{font-family:'DM Mono',monospace;font-size:11px;color:#6b7280;margin-top:8px;line-height:1.8}
-.ok{color:#4be8a0}.warn{color:#e8b84b}.err{color:#e84b4b}
+.ok{color:#4be8a0}.err{color:#e84b4b}
 .fhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .cnt{font-family:'DM Mono',monospace;font-size:11px;background:#2a2d36;border-radius:20px;padding:3px 10px;color:#6b7280}
 .cnt b{color:#e8b84b}
@@ -63,53 +62,68 @@ textarea:focus{border-color:#e8b84b}
 .tog::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:3px;left:3px;transition:left .2s}
 .tog.on::after{left:21px}
 
-/* Upload zone */
-.upload-zone{border:2px dashed #2a2d36;border-radius:12px;padding:30px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:12px;position:relative}
-.upload-zone:hover,.upload-zone.drag{border-color:#e8b84b;background:rgba(232,184,75,.04)}
-.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.upload-icon{font-size:36px;margin-bottom:8px}
-.upload-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:#e8e8e8;margin-bottom:4px}
-.upload-sub{font-size:11px;color:#6b7280;font-family:'DM Mono',monospace}
-.preview-img{width:100%;border-radius:8px;margin-bottom:10px;display:none}
-
-/* OCR progress */
-.ocr-bar{background:#2a2d36;border-radius:4px;height:6px;margin:10px 0;overflow:hidden;display:none}
-.ocr-fill{height:100%;background:#e8b84b;border-radius:4px;transition:width .3s;width:0}
-.ocr-status{font-family:'DM Mono',monospace;font-size:11px;color:#6b7280;text-align:center}
-
-/* Tabs */
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
-.tab{border:1px solid #2a2d36;border-radius:8px;background:#0a0a0a;color:#6b7280;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px;cursor:pointer;text-align:center;transition:all .2s}
-.tab.sel{border-color:#e8b84b;color:#e8b84b;background:rgba(232,184,75,.08)}
-
-/* PRINT */
+/* ══ PRINT ══════════════════════════════════════════════════════ */
 #sheet{display:none}
 @media print{
   #sheet{display:block}
   body>*:not(#sheet){display:none!important}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  body{background:white;color:black;padding:0;font-family:Arial,sans-serif}
-  @page{size:A4 portrait;margin:11mm}
-  .ph{display:flex;align-items:stretch;border:1.5pt solid black}
+  body{background:white;color:black;padding:0;font-family:Arial,sans-serif;font-size:10pt}
+  @page{size:A4 portrait;margin:10mm}
+
+  .ph{display:flex;align-items:stretch;border:1.5pt solid black;margin-bottom:0}
   .ph-l{flex:1;padding:6pt 10pt;font-size:11pt;border-right:1pt solid black}
   .ph-m{padding:6pt 16pt;font-size:11pt;font-weight:bold;text-align:center;display:flex;align-items:center;white-space:nowrap}
   .ph-r{flex:1;padding:6pt 10pt}
-  .pt{width:100%;border-collapse:collapse}
-  .pt th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
-  .pt td{border:1pt solid black;padding:5pt 6pt;vertical-align:middle;white-space:nowrap}
-  .pr{font-size:13pt;width:19%}
-  .pa{text-align:center;padding:3pt;width:6%}
-  .pab{display:inline-block;border:1pt solid black;padding:1pt 4pt;font-size:7pt;font-weight:bold;border-radius:2pt}
-  .pab.d{background:#ffd0d0}
-  .pp{font-size:9pt;font-style:italic;width:9%;white-space:nowrap}
-  .pp.u{text-decoration:underline}
-  .pt-t{font-size:13pt;width:12%}
-  .pf{font-size:13pt;width:19%}
-  .psep td{background:#f0f0f0;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt}
+
+  /* Colonnes: Reg | Flight | ARR-badge | Pick up | Time | Crew | Stand */
+  table.pt{width:100%;border-collapse:collapse}
+  table.pt th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
+  table.pt td{border:1pt solid black;padding:5pt 6pt;vertical-align:middle;white-space:nowrap}
+
+  .col-reg{width:17%}
+  .col-flt{width:17%}
+  .col-arr{width:6%;text-align:center;padding:3pt}
+  .col-pup{width:9%;font-size:9pt;font-style:italic}
+  .col-time{width:10%}
+  .col-crew{width:12%}
+  .col-stand{width:9%;text-align:center}
+
+  /* ARR badge arrivées : entouré + surligné vert clair */
+  .badge-arr{
+    display:inline-block;
+    border:1.5pt solid #2d7a2d;
+    border-radius:3pt;
+    padding:1pt 4pt;
+    font-size:7pt;font-weight:bold;
+    background:#d4edda;
+    color:#1a5c1a;
+  }
+
+  /* Pick up départs : entouré + surligné orange */
+  .badge-pup{
+    display:inline-block;
+    border:1.5pt solid #c0392b;
+    border-radius:3pt;
+    padding:1pt 5pt;
+    font-size:8pt;font-style:italic;
+    background:#fde8e8;
+    color:#7b1010;
+    white-space:nowrap;
+  }
+
+  /* Pick up arrivées : normal */
+  .plain-pup{font-size:9pt;font-style:italic}
+
+  .font-lg{font-size:13pt}
+
+  .psep td{background:#f0f0f0;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt;border:1pt solid black}
   .per td{height:22pt;border:1pt solid black}
-  .pb{width:100%;border-collapse:collapse;margin-top:10pt}
-  .pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:3pt;font-variant:small-caps}
-  .pb td{border:1pt solid black;padding:4pt;height:20pt;vertical-align:middle}
+
+  /* Tableau bas */
+  table.pb{width:100%;border-collapse:collapse;margin-top:10pt}
+  table.pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:3pt;font-variant:small-caps}
+  table.pb td{border:1pt solid black;padding:4pt;height:20pt;vertical-align:middle}
   .pdv{background:black!important;width:4pt;padding:0;border:none}
   .psh{font-weight:bold;font-size:9pt;text-align:center;padding:4pt;border:1pt solid black}
 }
@@ -127,7 +141,7 @@ textarea:focus{border-color:#e8b84b}
   </div>
 </div>
 
-<!-- STEP 0 : Shift -->
+<!-- STEP 0 -->
 <div class="sec show" id="s0">
   <div class="lbl">01 — INFOS DU SHIFT</div>
   <div class="card">
@@ -147,61 +161,29 @@ textarea:focus{border-color:#e8b84b}
   <button class="btn bp" onclick="go(1)">SUIVANT →</button>
 </div>
 
-<!-- STEP 1 : Input -->
+<!-- STEP 1 -->
 <div class="sec" id="s1">
-  <div class="lbl">02 — VOLS DU FIDS</div>
-
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab sel" id="tabImg" onclick="switchTab('img')">📷 CAPTURE D'ÉCRAN</button>
-    <button class="tab" id="tabTxt" onclick="switchTab('txt')">📋 COPIER-COLLER</button>
+  <div class="lbl">02 — COLLER LES VOLS</div>
+  <div class="tip">
+    <strong>📋 Comment faire :</strong><br>
+    1. Ouvre <strong>fids.liegeairport.com/spw</strong><br>
+    2. Attends que tous les vols chargent<br>
+    3. Sélectionne tout → <strong>Copier</strong><br>
+    4. Colle ici ↓<br><br>
+    <strong>✅ Arrivées + départs ensemble</strong> — l'app trie automatiquement !
   </div>
-
-  <!-- Image upload -->
-  <div id="paneImg">
-    <div class="tip">
-      <strong>📷 Comment faire :</strong><br>
-      1. Fais une capture d'écran du FIDS<br>
-      2. Uploade l'image ici<br>
-      3. L'app lit automatiquement les vols
-    </div>
-    <img id="prevImg" class="preview-img">
-    <div class="upload-zone" id="uploadZone">
-      <input type="file" id="fileInput" accept="image/*" onchange="handleImage(this)">
-      <div class="upload-icon">📷</div>
-      <div class="upload-title">Appuie pour choisir une image</div>
-      <div class="upload-sub">Screenshot du FIDS — JPG, PNG</div>
-    </div>
-    <div class="ocr-bar" id="ocrBar"><div class="ocr-fill" id="ocrFill"></div></div>
-    <div class="ocr-status" id="ocrStatus"></div>
-    <div class="info" id="iImg"></div>
-    <div class="brow" style="margin-top:12px">
-      <button class="btn bs" onclick="go(0)">← RETOUR</button>
-      <button class="btn bp" id="btnOcr" onclick="doOCR()" style="display:none">ANALYSER L'IMAGE →</button>
-    </div>
+  <div class="card">
+    <label>TEXTE COPIÉ DEPUIS LE FIDS</label>
+    <textarea id="tFids" placeholder="Colle ici tout le texte du FIDS..."></textarea>
+    <div class="info" id="iInfo"></div>
   </div>
-
-  <!-- Texte -->
-  <div id="paneTxt" style="display:none">
-    <div class="tip">
-      <strong>📋 Comment faire :</strong><br>
-      1. Ouvre <strong>fids.liegeairport.com/spw</strong><br>
-      2. Sélectionne tout → Copier<br>
-      3. Colle ici ↓
-    </div>
-    <div class="card">
-      <label>TEXTE COPIÉ DEPUIS LE FIDS</label>
-      <textarea id="tFids" placeholder="Colle ici tout le texte du FIDS..."></textarea>
-      <div class="info" id="iInfo"></div>
-    </div>
-    <div class="brow">
-      <button class="btn bs" onclick="go(0)">← RETOUR</button>
-      <button class="btn bp" onclick="doAnalyse()">ANALYSER →</button>
-    </div>
+  <div class="brow">
+    <button class="btn bs" onclick="go(0)">← RETOUR</button>
+    <button class="btn bp" onclick="doAnalyse()">ANALYSER →</button>
   </div>
 </div>
 
-<!-- STEP 2 : Preview -->
+<!-- STEP 2 -->
 <div class="sec" id="s2">
   <div class="lbl">03 — VÉRIFICATION</div>
   <div class="card">
@@ -225,7 +207,7 @@ textarea:focus{border-color:#e8b84b}
   </div>
 </div>
 
-<!-- FEUILLE PRINT -->
+<!-- ══ FEUILLE IMPRIMABLE ══════════════════════════════════════════ -->
 <div id="sheet">
   <div class="ph">
     <div class="ph-l" id="sh-date"></div>
@@ -233,22 +215,35 @@ textarea:focus{border-color:#e8b84b}
     <div class="ph-r"></div>
   </div>
   <table class="pt">
-    <thead><tr>
-      <th style="width:19%">Registration</th>
-      <th colspan="3" style="width:27%">Time (Local)</th>
-      <th style="width:19%">Flight Number</th>
-      <th style="width:10%">Crew</th>
-      <th style="width:8%">Stand</th>
-    </tr></thead>
+    <thead>
+      <tr>
+        <th class="col-reg">Registration</th>
+        <th class="col-flt">Flight Number</th>
+        <th class="col-arr">ARR</th>
+        <th class="col-pup">Pick up</th>
+        <th class="col-time">Time (Local)</th>
+        <th class="col-crew">Crew</th>
+        <th class="col-stand">Stand</th>
+      </tr>
+    </thead>
     <tbody id="sh-rows"></tbody>
   </table>
   <br>
   <table class="pb">
-    <tr><td colspan="3" class="psh">Headset</td><td class="pdv"></td><td colspan="4" class="psh">Handling</td></tr>
     <tr>
-      <th style="width:16%">Registration</th><th style="width:14%">FLT #</th><th style="width:14%">Depart</th>
+      <td colspan="3" class="psh">Headset</td>
       <td class="pdv"></td>
-      <th style="width:14%">Registration</th><th style="width:12%">FLT #</th><th style="width:13%">DEP // ARR</th><th>Handling WFS</th>
+      <td colspan="4" class="psh">Handling</td>
+    </tr>
+    <tr>
+      <th style="width:16%">Registration</th>
+      <th style="width:14%">FLT #</th>
+      <th style="width:14%">Depart</th>
+      <td class="pdv"></td>
+      <th style="width:14%">Registration</th>
+      <th style="width:12%">FLT #</th>
+      <th style="width:13%">DEP // ARR</th>
+      <th>Handling WFS</th>
     </tr>
     <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
     <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
@@ -261,285 +256,262 @@ textarea:focus{border-color:#e8b84b}
 const S = { shift:'NIGHT', arr:[], dep:[] };
 const opts = { empty:true };
 const HL = ['WFS','CHALLENGE','SWISSPORT','BAS','FEDEX','AVIAPARTNER'];
-const AC = /^(B7[0-9]{2}[LW]?|A3[0-9]{2}|B738|B763|B744|B748|A306|A332|A333|B734|B752|A321|B77[LW]|AT7[0-9]|CRJ|E[0-9]{3}|C25[ABC]|DA4[0-9]|PC1[0-9]|R44|GLF|E50P|C56[0X]|DH8[ABCD])$/i;
+const AC = /^(B7[0-9]{2}[LW]?|A3[0-9]{2}|B738|B763|B744|B748|A306|A332|A333|B734|B752|A321|B77[LW]|AT7[0-9]|CRJ|E[0-9]{3}|C25[ABC]|DA4[0-9]|PC1[0-9]|GLF4?|FA7X|LJ45|C510|C680)$/i;
 
 document.getElementById('sDate').value = new Date().toISOString().slice(0,10);
 
-// ── Navigation ────────────────────────────────────────────────────
-function go(n) {
-  document.querySelectorAll('.sec').forEach((s,i) => s.classList.toggle('show', i===n));
-  document.querySelectorAll('.dot').forEach((d,i) => { d.classList.toggle('on', i===n); d.classList.toggle('done', i<n); });
+function go(n){
+  document.querySelectorAll('.sec').forEach((s,i)=>s.classList.toggle('show',i===n));
+  document.querySelectorAll('.dot').forEach((d,i)=>{d.classList.toggle('on',i===n);d.classList.toggle('done',i<n);});
   window.scrollTo(0,0);
 }
-function selShift(s, el) {
-  S.shift=s;
-  document.querySelectorAll('.sbtn').forEach(b => b.classList.remove('sel'));
-  el.classList.add('sel');
-}
-function reset() { S.arr=[]; S.dep=[]; document.getElementById('tFids').value=''; go(0); }
+function selShift(s,el){S.shift=s;document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
+function reset(){S.arr=[];S.dep=[];document.getElementById('tFids').value='';go(0);}
 
-function switchTab(t) {
-  document.getElementById('paneImg').style.display = t==='img' ? 'block' : 'none';
-  document.getElementById('paneTxt').style.display = t==='txt' ? 'block' : 'none';
-  document.getElementById('tabImg').classList.toggle('sel', t==='img');
-  document.getElementById('tabTxt').classList.toggle('sel', t==='txt');
-}
-
-// ── Handler rules ─────────────────────────────────────────────────
-// CHALLENGE → toujours
-// WFS → toujours
-// SWISSPORT → uniquement si vol commence par TAY
-// Tout le reste → exclu (vol pas affiché)
-function shouldInclude(flight, raw) {
-  if (!raw) return false;
-  const r = raw.toUpperCase().trim();
-  if (r === 'CHALLENGE') return true;
-  if (r === 'WFS') return true;
-  if (r === 'SWISSPORT' && flight.toUpperCase().startsWith('TAY')) return true;
+// ── Handler : inclure seulement CHALLENGE, WFS, SWISSPORT+TAY ────
+function shouldInclude(flight, raw){
+  if(!raw) return false;
+  const r=raw.toUpperCase().trim();
+  if(r==='CHALLENGE'||r==='WFS') return true;
+  if(r==='SWISSPORT'&&flight.toUpperCase().startsWith('TAY')) return true;
   return false;
 }
 
 // ── Pickup time ETD - 1h15 ────────────────────────────────────────
-function pickup(t) {
-  const [h,m] = t.split(':').map(Number);
-  let x = h*60+m-75; if(x<0) x+=1440;
+function pickup(t){
+  const[h,m]=t.split(':').map(Number);
+  let x=h*60+m-75;if(x<0)x+=1440;
   return String(Math.floor(x/60)%24).padStart(2,'0')+':'+String(x%60).padStart(2,'0');
 }
 
-// ── In shift window ───────────────────────────────────────────────
-function inWin(t) {
-  if (!t || !/^\d{1,2}:\d{2}$/.test(t)) return false;
-  const [h,m] = t.split(':').map(Number), mins = h*60+m;
-  if (S.shift==='NIGHT') return mins>=22*60 || mins<6*60;
-  if (S.shift==='EARLY') return mins>=6*60  && mins<14*60;
-  return mins>=14*60 && mins<22*60;
+// ── Fenêtre shift (basée sur ETA pour ARR, ETD pour DEP) ─────────
+function inWinArr(t){
+  // Pour les arrivées : ETA dans la fenêtre
+  if(!t||!/^\d{1,2}:\d{2}$/.test(t))return false;
+  const[h,m]=t.split(':').map(Number),mins=h*60+m;
+  if(S.shift==='NIGHT')return mins>=22*60||mins<6*60;
+  if(S.shift==='EARLY')return mins>=6*60&&mins<14*60;
+  return mins>=14*60&&mins<22*60;
+}
+function inWinDep(t){
+  // Pour les départs : pickup time (ETD-1h15) dans la fenêtre
+  const pk=pickup(t);
+  return inWinArr(pk);
 }
 
-// ── Is OACI airport code ──────────────────────────────────────────
-function isOACI(s) {
-  return /^[EBLFKOGZDRUYCNHPWVTSBCPT][A-Z]{3}$/.test(s) && !/\d/.test(s);
+// ── OACI airport code ─────────────────────────────────────────────
+function isOACI(s){return /^[EBLFKOGZDRUYCNHPWVTSBCP][A-Z]{3}$/.test(s)&&!/\d/.test(s);}
+
+// ── Aircraft registration ─────────────────────────────────────────
+function isReg(s){
+  if(!s||s.length<4||s.length>8)return false;
+  if(!/^[A-Z0-9]+$/.test(s)||/^\d+$/.test(s))return false;
+  if(isOACI(s)||AC.test(s)||HL.includes(s))return false;
+  if(/^\d+[A-Z]?$/.test(s)&&s.length<=4)return false;
+  return/\d/.test(s)||/^(OE|TF|OO|9H|EI|N[0-9]|G|F|D|PH|SE|OH|LN|SP|HA|YR|LZ|CS|EC|TC|SU|ET|5Y|VT|B|JA|HL|A6|A7|EK|UK|UR|4X)/i.test(s);
 }
 
-// ── Is aircraft registration ──────────────────────────────────────
-function isReg(s) {
-  if (!s || s.length < 4 || s.length > 8) return false;
-  if (!/^[A-Z0-9]+$/.test(s) || /^\d+$/.test(s)) return false;
-  if (isOACI(s) || AC.test(s) || HL.includes(s)) return false;
-  if (/^\d+[A-Z]?$/.test(s) && s.length <= 4) return false;
-  return /\d/.test(s) || /^(OE|TF|OO|9H|EI|N[0-9]|G-|F-|D-|PH|SE|OH|LN|SP|HA|YR|LZ|CS|EC|TC|SU|ET|5Y|VT|B-|JA|HL|A6|A7|EK|UK|UR|4X)/i.test(s);
-}
+// ── Is stand number ───────────────────────────────────────────────
+function isStand(s){return /^\d{1,3}[A-Z]?$/.test(s)&&parseInt(s)<200;}
 
-// ── Parse text ────────────────────────────────────────────────────
-function parseFids(text) {
-  const arrivals=[], departures=[], seen=new Set();
-  const lines = text.split('\n').map(l=>l.trim()).filter(l=>l.length>5);
+// ── Parse FIDS ────────────────────────────────────────────────────
+function parseFids(text){
+  const arrivals=[],departures=[],seen=new Set();
+  const lines=text.split('\n').map(l=>l.trim()).filter(l=>l.length>5);
 
-  for (const line of lines) {
-    const upper = line.toUpperCase();
-    if (/^(date|flight|a\/c|direction|handler|filter|utc|lt$|night mode|day mode|version|all time|reset|clear|cancel|took off|soon|later|landed|runway|stand|via$|arrivals$|departures$)/i.test(line)) continue;
-    if (line.length < 10) continue;
+  for(const line of lines){
+    const upper=line.toUpperCase();
+    // Ignorer les lignes UI
+    if(/^(date|flight|a\/c|direction|handler|filter|utc|lt$|night mode|day mode|version|all time|reset|clear|cancel|took off|soon|later|landed|runway|stand|via$|arrivals$|departures$|pyxis|system)/i.test(line))continue;
+    if(line.length<10)continue;
 
-    const tokens = line.split(/\s+/);
-    if (tokens.length < 4) continue;
+    const tokens=line.split(/\s+/);
+    if(tokens.length<4)continue;
 
-    const times = tokens.filter(t => /^\d{1,2}:\d{2}$/.test(t));
-    if (!times.length) continue;
-    const eta = times[times.length-1];
-    if (!inWin(eta)) continue;
+    // Toutes les heures HH:MM de la ligne
+    const times=tokens.filter(t=>/^\d{1,2}:\d{2}$/.test(t));
+    if(!times.length)continue;
+    // ETD/ETA = dernière heure
+    const eta=times[times.length-1];
 
-    // Type: ARR ou DEP
-    let type = null;
-    if (upper.startsWith('DEPARTURES')||upper.startsWith('DEPARTURE')) type='dep';
-    else if (upper.startsWith('ARRIVALS')||upper.startsWith('ARRIVAL')) type='arr';
-    else if (upper.includes('DEPARTURES')) type='dep';
-    else if (upper.includes('ARRIVALS')) type='arr';
-    else {
-      const eblgIdx = tokens.indexOf('EBLG');
-      type = (eblgIdx !== -1 && eblgIdx < tokens.length/2) ? 'dep' : 'arr';
+    // Type ARR ou DEP
+    let type=null;
+    if(upper.startsWith('DEPARTURES')||upper.startsWith('DEPARTURE'))type='dep';
+    else if(upper.startsWith('ARRIVALS')||upper.startsWith('ARRIVAL'))type='arr';
+    else if(upper.includes('DEPARTURES'))type='dep';
+    else if(upper.includes('ARRIVALS'))type='arr';
+    else{
+      const idx=tokens.indexOf('EBLG');
+      type=(idx!==-1&&idx<tokens.length/2)?'dep':'arr';
     }
+
+    // Vérifier fenêtre selon type
+    if(type==='arr'&&!inWinArr(eta))continue;
+    if(type==='dep'&&!inWinDep(eta))continue;
 
     // Handler
-    let hw = '';
-    for (const h of HL) { if (upper.includes(h)) { hw=h; break; } }
+    let hw='';
+    for(const h of HL){if(upper.includes(h)){hw=h;break;}}
 
     // Flight number
-    let flight = '';
-    for (const t of tokens) {
-      if (/^[A-Z]{1,3}\d{3,5}[A-Z]?$/.test(t) && !/^\d+$/.test(t)) { flight=t; break; }
+    let flight='';
+    for(const t of tokens){
+      if(/^[A-Z]{1,3}\d{3,5}[A-Z]?$/.test(t)&&!/^\d+$/.test(t)){flight=t;break;}
     }
-    if (!flight) continue;
+    if(!flight)continue;
 
-    // Appliquer la règle handler — exclure si handler non éligible
-    if (!shouldInclude(flight, hw)) continue;
-
-    // Dédupliquer
-    if (seen.has(flight)) continue;
+    // Vérifier handler
+    if(!shouldInclude(flight,hw))continue;
+    if(seen.has(flight))continue;
     seen.add(flight);
 
     // Registration
-    let reg = '';
-    for (const t of tokens) {
-      if (t===flight||/^\d{1,2}:\d{2}$/.test(t)||/^\d{2}\//.test(t)) continue;
-      if (HL.includes(t.toUpperCase())||t==='EBLG') continue;
-      if (isReg(t)) { reg=t; break; }
+    let reg='';
+    for(const t of tokens){
+      if(t===flight||/^\d{1,2}:\d{2}$/.test(t)||/^\d{2}\//.test(t))continue;
+      if(HL.includes(t.toUpperCase())||t==='EBLG')continue;
+      if(isStand(t))continue;
+      if(isReg(t)){reg=t;break;}
     }
 
-    const obj = { flight, reg, eta, time: type==='dep' ? pickup(eta) : eta, handler: hw, type };
-    if (type==='dep') departures.push(obj);
+    // Stand (numéro entre 1 et 199, éventuellement suivi d'une lettre)
+    let stand='';
+    for(const t of tokens){
+      if(isStand(t)&&t!==reg){stand=t;break;}
+    }
+
+    const obj={flight,reg,eta,time:type==='dep'?pickup(eta):eta,handler:hw,stand,type};
+    if(type==='dep')departures.push(obj);
     else arrivals.push(obj);
   }
 
-  return { arrivals, departures };
+  return{arrivals,departures};
 }
 
-// ── Analyse texte ─────────────────────────────────────────────────
-function doAnalyse(text) {
-  const t = text || document.getElementById('tFids').value;
-  if (!t.trim()) { alert('Colle le texte du FIDS d\'abord.'); return; }
-  const { arrivals, departures } = parseFids(t);
-  S.arr = arrivals; S.dep = departures;
-  const total = arrivals.length + departures.length;
-  if (!total) {
-    document.getElementById('iInfo').innerHTML = `<span class="err">⚠ Aucun vol détecté (shift ${S.shift}).</span>`;
+// ── Analyser ──────────────────────────────────────────────────────
+function doAnalyse(){
+  const t=document.getElementById('tFids').value;
+  if(!t.trim()){alert('Colle le texte du FIDS d\'abord.');return;}
+  const{arrivals,departures}=parseFids(t);
+  S.arr=arrivals;S.dep=departures;
+  const total=arrivals.length+departures.length;
+  if(!total){
+    document.getElementById('iInfo').innerHTML=`<span class="err">⚠ Aucun vol détecté (shift ${S.shift}). Vérifie le texte collé.</span>`;
     return;
   }
-  document.getElementById('iInfo').innerHTML = `<span class="ok">✓ ${arrivals.length} arrivée(s) + ${departures.length} départ(s)</span>`;
-  renderPreview(); go(2);
-}
-
-// ── OCR Image ─────────────────────────────────────────────────────
-let ocrImageData = null;
-
-function handleImage(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    ocrImageData = e.target.result;
-    const img = document.getElementById('prevImg');
-    img.src = ocrImageData;
-    img.style.display = 'block';
-    document.getElementById('uploadZone').style.display = 'none';
-    document.getElementById('btnOcr').style.display = 'block';
-    document.getElementById('iImg').innerHTML = `<span class="ok">✓ Image chargée — appuie sur ANALYSER</span>`;
-  };
-  reader.readAsDataURL(file);
-}
-
-async function doOCR() {
-  if (!ocrImageData) return;
-  const bar = document.getElementById('ocrBar');
-  const fill = document.getElementById('ocrFill');
-  const status = document.getElementById('ocrStatus');
-  const btn = document.getElementById('btnOcr');
-
-  btn.style.display = 'none';
-  bar.style.display = 'block';
-  status.textContent = '⏳ Lecture de l\'image en cours...';
-
-  try {
-    const result = await Tesseract.recognize(ocrImageData, 'eng', {
-      logger: m => {
-        if (m.status === 'recognizing text') {
-          const pct = Math.round(m.progress * 100);
-          fill.style.width = pct + '%';
-          status.textContent = `⏳ OCR : ${pct}%`;
-        }
-      }
-    });
-
-    const text = result.data.text;
-    bar.style.display = 'none';
-    status.textContent = '';
-
-    if (!text.trim()) {
-      document.getElementById('iImg').innerHTML = `<span class="err">⚠ Impossible de lire l'image.</span>`;
-      btn.style.display = 'block';
-      return;
-    }
-
-    // Analyser le texte OCR
-    const { arrivals, departures } = parseFids(text);
-    S.arr = arrivals; S.dep = departures;
-    const total = arrivals.length + departures.length;
-
-    if (!total) {
-      document.getElementById('iImg').innerHTML = `<span class="err">⚠ Aucun vol détecté (shift ${S.shift}).<br>Essaie le mode copier-coller.</span>`;
-      btn.style.display = 'block';
-      return;
-    }
-
-    document.getElementById('iImg').innerHTML = `<span class="ok">✓ ${arrivals.length} arrivée(s) + ${departures.length} départ(s)</span>`;
-    renderPreview();
-    go(2);
-
-  } catch(e) {
-    bar.style.display = 'none';
-    status.textContent = '';
-    document.getElementById('iImg').innerHTML = `<span class="err">⚠ Erreur OCR : ${e.message}</span>`;
-    btn.style.display = 'block';
-  }
+  document.getElementById('iInfo').innerHTML=`<span class="ok">✓ ${arrivals.length} arrivée(s) + ${departures.length} départ(s)</span>`;
+  renderPreview();go(2);
 }
 
 // ── Preview ───────────────────────────────────────────────────────
-function renderPreview() {
-  document.getElementById('cA').textContent = S.arr.length;
-  document.getElementById('cD').textContent = S.dep.length;
-  let h = '';
-  if (S.arr.length) {
-    h += `<div class="grp a">✈ ARRIVÉES (${S.arr.length})</div>`;
-    S.arr.forEach(f => {
-      h += `<div class="fi a">
+function renderPreview(){
+  document.getElementById('cA').textContent=S.arr.length;
+  document.getElementById('cD').textContent=S.dep.length;
+  let h='';
+  if(S.arr.length){
+    h+=`<div class="grp a">✈ ARRIVÉES (${S.arr.length})</div>`;
+    S.arr.forEach(f=>{
+      h+=`<div class="fi a">
         <div class="fi-t">${f.time}</div>
         <div class="fi-b">
           <div class="fi-f">${f.flight}</div>
-          <div class="fi-r">${f.reg||'—'} · ${f.handler}</div>
+          <div class="fi-r">${f.reg||'—'} · ${f.handler}${f.stand?' · Stand '+f.stand:''}</div>
         </div>
         <div class="fi-bx a">ARR</div>
       </div>`;
     });
   }
-  if (S.dep.length) {
-    h += `<div class="grp d">✈ DÉPARTS — pick up = ETD-1h15 (${S.dep.length})</div>`;
-    S.dep.forEach(f => {
-      h += `<div class="fi d">
+  if(S.dep.length){
+    h+=`<div class="grp d">✈ DÉPARTS — pick up = ETD-1h15 (${S.dep.length})</div>`;
+    S.dep.forEach(f=>{
+      h+=`<div class="fi d">
         <div class="fi-t">${f.time}<div class="fi-etd">ETD ${f.eta}</div></div>
         <div class="fi-b">
           <div class="fi-f">${f.flight}</div>
-          <div class="fi-r">${f.reg||'—'} · ${f.handler}</div>
+          <div class="fi-r">${f.reg||'—'} · ${f.handler}${f.stand?' · Stand '+f.stand:''}</div>
         </div>
         <div class="fi-bx d">DEP</div>
       </div>`;
     });
   }
-  if (!h) h = `<div style="color:#6b7280;text-align:center;padding:20px;font-size:13px">Aucun vol</div>`;
-  document.getElementById('prev').innerHTML = h;
+  if(!h)h=`<div style="color:#6b7280;text-align:center;padding:20px;font-size:13px">Aucun vol</div>`;
+  document.getElementById('prev').innerHTML=h;
 }
 
-// ── Generate PDF ──────────────────────────────────────────────────
-function genPDF() {
-  const dateVal = document.getElementById('sDate').value;
-  const dl = dateVal ? dateVal.split('-').reverse().join('/') : '—';
-  document.getElementById('sh-date').textContent = 'Crew bus service   ' + dl;
-  document.getElementById('sh-shift').innerHTML = 'EARLY // LATE // <u><b>' + S.shift + '</b></u>';
+// ── Générer PDF ───────────────────────────────────────────────────
+function genPDF(){
+  const dateVal=document.getElementById('sDate').value;
+  const dl=dateVal?dateVal.split('-').reverse().join('/'):'—';
+  // Nom : CrewBus - NIGHT - 31-05
+  const dateName=dateVal?dateVal.slice(5).replace('-','-'):'';
+  const title=`CrewBus - ${S.shift} - ${dateName}`;
 
-  let rows = '';
-  S.arr.forEach(f => {
-    rows += `<tr><td class="pr">${f.reg||''}</td><td class="pa"><span class="pab">ARR</span></td><td class="pp">Pick up</td><td class="pt-t">${f.time}</td><td class="pf">${f.flight}</td><td></td><td></td></tr>`;
+  let rows='';
+  S.arr.forEach(f=>{
+    rows+=`<tr>
+      <td class="col-reg font-lg">${f.reg||''}</td>
+      <td class="col-flt font-lg">${f.flight}</td>
+      <td class="col-arr"><span class="badge-arr">ARR</span></td>
+      <td class="col-pup"><span class="plain-pup">Pick up</span></td>
+      <td class="col-time font-lg">${f.time}</td>
+      <td class="col-crew"></td>
+      <td class="col-stand">${f.stand||''}</td>
+    </tr>`;
   });
-  if (S.arr.length && S.dep.length) {
-    rows += `<tr class="psep"><td colspan="7">— DÉPARTS —</td></tr>`;
-  }
-  S.dep.forEach(f => {
-    rows += `<tr><td class="pr">${f.reg||''}</td><td class="pa"><span class="pab d">ARR</span></td><td class="pp u">Pick up</td><td class="pt-t">${f.time}</td><td class="pf">${f.flight}</td><td></td><td></td></tr>`;
+  if(S.arr.length&&S.dep.length)rows+=`<tr class="psep"><td colspan="7">— DÉPARTS —</td></tr>`;
+  S.dep.forEach(f=>{
+    rows+=`<tr>
+      <td class="col-reg font-lg">${f.reg||''}</td>
+      <td class="col-flt font-lg">${f.flight}</td>
+      <td class="col-arr"></td>
+      <td class="col-pup"><span class="badge-pup">Pick up</span></td>
+      <td class="col-time font-lg">${f.time}</td>
+      <td class="col-crew"></td>
+      <td class="col-stand">${f.stand||''}</td>
+    </tr>`;
   });
-  if (opts.empty) {
-    for (let i=0;i<5;i++) {
-      rows += `<tr class="per"><td></td><td class="pa"><span class="pab">ARR</span></td><td class="pp">Pick up</td><td></td><td></td><td></td><td></td></tr>`;
+  if(opts.empty){
+    for(let i=0;i<5;i++){
+      rows+=`<tr class="per"><td></td><td></td><td class="col-arr"><span class="badge-arr">ARR</span></td><td class="col-pup"><span class="plain-pup">Pick up</span></td><td></td><td></td><td></td></tr>`;
     }
   }
-  document.getElementById('sh-rows').innerHTML = rows;
-  window.print();
+
+  const css=`*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:10pt;background:white;color:black}@page{size:A4 portrait;margin:10mm}.ph{display:flex;align-items:stretch;border:1.5pt solid black;margin-bottom:0}.ph-l{flex:1;padding:6pt 10pt;font-size:11pt;border-right:1pt solid black}.ph-m{padding:6pt 16pt;font-size:11pt;font-weight:bold;text-align:center;display:flex;align-items:center;white-space:nowrap}.ph-r{flex:1;padding:6pt 10pt}table.pt{width:100%;border-collapse:collapse}table.pt th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}table.pt td{border:1pt solid black;padding:5pt 6pt;vertical-align:middle;white-space:nowrap}.col-reg{width:17%}.col-flt{width:17%}.col-arr{width:6%;text-align:center;padding:3pt}.col-pup{width:9%;font-size:9pt;font-style:italic}.col-time{width:10%}.col-crew{width:12%}.col-stand{width:9%;text-align:center}.badge-arr{display:inline-block;border:1.5pt solid #2d7a2d;border-radius:3pt;padding:1pt 4pt;font-size:7pt;font-weight:bold;background:#d4edda;color:#1a5c1a}.badge-pup{display:inline-block;border:1.5pt solid #c0392b;border-radius:3pt;padding:1pt 5pt;font-size:8pt;font-style:italic;background:#fde8e8;color:#7b1010;white-space:nowrap}.plain-pup{font-size:9pt;font-style:italic}.font-lg{font-size:13pt}.psep td{background:#f0f0f0;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt;border:1pt solid black}.per td{height:22pt;border:1pt solid black}table.pb{width:100%;border-collapse:collapse;margin-top:10pt}table.pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:3pt;font-variant:small-caps}table.pb td{border:1pt solid black;padding:4pt;height:20pt;vertical-align:middle}.pdv{background:black!important;width:4pt;padding:0;border:none}.psh{font-weight:bold;font-size:9pt;text-align:center;padding:4pt;border:1pt solid black}`;
+
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title><style>${css}</style></head><body>
+<div class="ph">
+  <div class="ph-l">Crew bus service &nbsp;&nbsp;&nbsp;${dl}</div>
+  <div class="ph-m">EARLY // LATE // <u><b>${S.shift}</b></u></div>
+  <div class="ph-r"></div>
+</div>
+<table class="pt"><thead><tr>
+  <th class="col-reg">Registration</th>
+  <th class="col-flt">Flight Number</th>
+  <th class="col-arr">ARR</th>
+  <th class="col-pup">Pick up</th>
+  <th class="col-time">Time (Local)</th>
+  <th class="col-crew">Crew</th>
+  <th class="col-stand">Stand</th>
+</tr></thead><tbody>${rows}</tbody></table>
+<table class="pb">
+  <tr><td colspan="3" class="psh">Headset</td><td class="pdv"></td><td colspan="4" class="psh">Handling</td></tr>
+  <tr><th style="width:16%">Registration</th><th style="width:14%">FLT #</th><th style="width:14%">Depart</th><td class="pdv"></td><th style="width:14%">Registration</th><th style="width:12%">FLT #</th><th style="width:13%">DEP // ARR</th><th>Handling WFS</th></tr>
+  <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
+  <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
+</table>
+<script>window.onload=function(){window.print()}<\/script>
+</body></html>`;
+
+  // Ouvrir dans nouvel onglet — le titre = nom du PDF dans Safari
+  const blob=new Blob([html],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.target='_blank';
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),5000);
 }
 </script>
 </body>
