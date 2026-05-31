@@ -442,76 +442,55 @@ function renderPreview(){
 function genPDF(){
   const dateVal=document.getElementById('sDate').value;
   const dl=dateVal?dateVal.split('-').reverse().join('/'):'—';
-  // Nom : CrewBus - NIGHT - 31-05
-  const dateName=dateVal?dateVal.slice(5).replace('-','-'):'';
-  const title=`CrewBus - ${S.shift} - ${dateName}`;
+
+  document.getElementById('sh-date').textContent='Crew bus service   '+dl;
+  document.getElementById('sh-shift').innerHTML='EARLY // LATE // <u><b>'+S.shift+'</b></u>';
 
   let rows='';
+
+  // ARRIVÉES : ARR entouré vert + Pick up normal
   S.arr.forEach(f=>{
     rows+=`<tr>
       <td class="col-reg font-lg">${f.reg||''}</td>
       <td class="col-flt font-lg">${f.flight}</td>
       <td class="col-arr"><span class="badge-arr">ARR</span></td>
-      <td class="col-pup"><span class="plain-pup">Pick up</span></td>
+      <td class="col-pup">Pick up</td>
       <td class="col-time font-lg">${f.time}</td>
       <td class="col-crew"></td>
       <td class="col-stand">${f.stand||''}</td>
     </tr>`;
   });
+
   if(S.arr.length&&S.dep.length)rows+=`<tr class="psep"><td colspan="7">— DÉPARTS —</td></tr>`;
+
+  // DÉPARTS : ARR sans entourage + Pick up entouré rouge
   S.dep.forEach(f=>{
     rows+=`<tr>
       <td class="col-reg font-lg">${f.reg||''}</td>
       <td class="col-flt font-lg">${f.flight}</td>
-      <td class="col-arr"></td>
+      <td class="col-arr">ARR</td>
       <td class="col-pup"><span class="badge-pup">Pick up</span></td>
       <td class="col-time font-lg">${f.time}</td>
       <td class="col-crew"></td>
       <td class="col-stand">${f.stand||''}</td>
     </tr>`;
   });
+
+  // Lignes vides : ARR et Pick up en texte simple, sans badge
   if(opts.empty){
     for(let i=0;i<5;i++){
-      rows+=`<tr class="per"><td></td><td></td><td class="col-arr"><span class="badge-arr">ARR</span></td><td class="col-pup"><span class="plain-pup">Pick up</span></td><td></td><td></td><td></td></tr>`;
+      rows+=`<tr class="per">
+        <td></td>
+        <td></td>
+        <td class="col-arr">ARR</td>
+        <td class="col-pup">Pick up</td>
+        <td></td><td></td><td></td>
+      </tr>`;
     }
   }
 
-  const css=`*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:10pt;background:white;color:black}@page{size:A4 portrait;margin:10mm}.ph{display:flex;align-items:stretch;border:1.5pt solid black;margin-bottom:0}.ph-l{flex:1;padding:6pt 10pt;font-size:11pt;border-right:1pt solid black}.ph-m{padding:6pt 16pt;font-size:11pt;font-weight:bold;text-align:center;display:flex;align-items:center;white-space:nowrap}.ph-r{flex:1;padding:6pt 10pt}table.pt{width:100%;border-collapse:collapse}table.pt th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}table.pt td{border:1pt solid black;padding:5pt 6pt;vertical-align:middle;white-space:nowrap}.col-reg{width:17%}.col-flt{width:17%}.col-arr{width:6%;text-align:center;padding:3pt}.col-pup{width:9%;font-size:9pt;font-style:italic}.col-time{width:10%}.col-crew{width:12%}.col-stand{width:9%;text-align:center}.badge-arr{display:inline-block;border:1.5pt solid #2d7a2d;border-radius:3pt;padding:1pt 4pt;font-size:7pt;font-weight:bold;background:#d4edda;color:#1a5c1a}.badge-pup{display:inline-block;border:1.5pt solid #c0392b;border-radius:3pt;padding:1pt 5pt;font-size:8pt;font-style:italic;background:#fde8e8;color:#7b1010;white-space:nowrap}.plain-pup{font-size:9pt;font-style:italic}.font-lg{font-size:13pt}.psep td{background:#f0f0f0;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt;border:1pt solid black}.per td{height:22pt;border:1pt solid black}table.pb{width:100%;border-collapse:collapse;margin-top:10pt}table.pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:3pt;font-variant:small-caps}table.pb td{border:1pt solid black;padding:4pt;height:20pt;vertical-align:middle}.pdv{background:black!important;width:4pt;padding:0;border:none}.psh{font-weight:bold;font-size:9pt;text-align:center;padding:4pt;border:1pt solid black}`;
-
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title><style>${css}</style></head><body>
-<div class="ph">
-  <div class="ph-l">Crew bus service &nbsp;&nbsp;&nbsp;${dl}</div>
-  <div class="ph-m">EARLY // LATE // <u><b>${S.shift}</b></u></div>
-  <div class="ph-r"></div>
-</div>
-<table class="pt"><thead><tr>
-  <th class="col-reg">Registration</th>
-  <th class="col-flt">Flight Number</th>
-  <th class="col-arr">ARR</th>
-  <th class="col-pup">Pick up</th>
-  <th class="col-time">Time (Local)</th>
-  <th class="col-crew">Crew</th>
-  <th class="col-stand">Stand</th>
-</tr></thead><tbody>${rows}</tbody></table>
-<table class="pb">
-  <tr><td colspan="3" class="psh">Headset</td><td class="pdv"></td><td colspan="4" class="psh">Handling</td></tr>
-  <tr><th style="width:16%">Registration</th><th style="width:14%">FLT #</th><th style="width:14%">Depart</th><td class="pdv"></td><th style="width:14%">Registration</th><th style="width:12%">FLT #</th><th style="width:13%">DEP // ARR</th><th>Handling WFS</th></tr>
-  <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
-  <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
-  <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
-  <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
-</table>
-<script>window.onload=function(){window.print()}<\/script>
-</body></html>`;
-
-  // Ouvrir dans nouvel onglet — le titre = nom du PDF dans Safari
-  const blob=new Blob([html],{type:'text/html'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.target='_blank';
-  a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),5000);
+  document.getElementById('sh-rows').innerHTML=rows;
+  window.print();
 }
 </script>
 </body>
