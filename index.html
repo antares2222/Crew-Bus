@@ -76,18 +76,18 @@ textarea:focus{border-color:#e8b84b}
   .ph-m{padding:6pt 16pt;font-size:11pt;font-weight:bold;text-align:center;display:flex;align-items:center;white-space:nowrap}
   .ph-r{flex:1;padding:6pt 10pt}
 
-  /* Colonnes: Reg | Flight | ARR-badge | Pick up | Time | Crew | Stand */
+  /* Colonnes: Reg | Flight | ARR-badge | Pick up | Time | Stand | Note */
   table.pt{width:100%;border-collapse:collapse}
   table.pt th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
-  table.pt td{border:1pt solid black;padding:5pt 6pt;vertical-align:middle;white-space:nowrap}
+  table.pt td{border:1pt solid black;padding:5pt 6pt;vertical-align:middle}
 
-  .col-reg{width:17%}
-  .col-flt{width:17%}
-  .col-arr{width:6%;text-align:center;padding:3pt}
-  .col-pup{width:9%;font-size:9pt;font-style:italic}
-  .col-time{width:10%}
-  .col-crew{width:12%}
-  .col-stand{width:9%;text-align:center}
+  .col-reg{width:13%}
+  .col-flt{width:13%}
+  .col-arr{width:7%;text-align:center;padding:3pt;font-size:8pt;font-weight:bold}
+  .col-pup{width:10%;font-size:9pt;font-style:italic}
+  .col-time{width:11%}
+  .col-stand{width:8%;text-align:center}
+  .col-note{width:26%}
 
   /* ARR badge arrivées : entouré + surligné vert clair */
   .badge-arr{
@@ -100,7 +100,7 @@ textarea:focus{border-color:#e8b84b}
     color:#1a5c1a;
   }
 
-  /* Pick up départs : entouré + surligné orange */
+  /* Pick up départs : entouré + surligné rouge */
   .badge-pup{
     display:inline-block;
     border:1.5pt solid #c0392b;
@@ -112,10 +112,7 @@ textarea:focus{border-color:#e8b84b}
     white-space:nowrap;
   }
 
-  /* Pick up arrivées : normal */
-  .plain-pup{font-size:9pt;font-style:italic}
-
-  .font-lg{font-size:13pt}
+  .font-lg{font-size:12pt}
 
   .psep td{background:#f0f0f0;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt;border:1pt solid black}
   .per td{height:22pt;border:1pt solid black}
@@ -222,8 +219,8 @@ textarea:focus{border-color:#e8b84b}
         <th class="col-arr">ARR</th>
         <th class="col-pup">Pick up</th>
         <th class="col-time">Time (Local)</th>
-        <th class="col-crew">Crew</th>
         <th class="col-stand">Stand</th>
+        <th class="col-note">Note</th>
       </tr>
     </thead>
     <tbody id="sh-rows"></tbody>
@@ -456,8 +453,8 @@ function genPDF(){
       <td class="col-arr"><span class="badge-arr">ARR</span></td>
       <td class="col-pup">Pick up</td>
       <td class="col-time font-lg">${f.time}</td>
-      <td class="col-crew"></td>
       <td class="col-stand">${f.stand||''}</td>
+      <td class="col-note"></td>
     </tr>`;
   });
 
@@ -471,8 +468,8 @@ function genPDF(){
       <td class="col-arr">ARR</td>
       <td class="col-pup"><span class="badge-pup">Pick up</span></td>
       <td class="col-time font-lg">${f.time}</td>
-      <td class="col-crew"></td>
       <td class="col-stand">${f.stand||''}</td>
+      <td class="col-note"></td>
     </tr>`;
   });
 
