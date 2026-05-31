@@ -473,17 +473,30 @@ function genPDF(){
     </tr>`;
   });
 
-  // Lignes vides : ARR et Pick up en texte simple, sans badge
-  if(opts.empty){
-    for(let i=0;i<5;i++){
-      rows+=`<tr class="per">
-        <td></td>
-        <td></td>
-        <td class="col-arr">ARR</td>
-        <td class="col-pup">Pick up</td>
-        <td></td><td></td><td></td>
-      </tr>`;
-    }
+  // Lignes vides dynamiques — remplir jusqu'au bas de la feuille
+  // A4 = 297mm, marges 10mm x2 = 277mm utilisables
+  // En-tête ~14mm, tableau bas ~38mm, en-tête tableau ~8mm = ~60mm réservés
+  // Chaque ligne de données ~8mm
+  // Lignes déjà présentes = arr + dep + (séparateur si les deux)
+  const sep = (S.arr.length && S.dep.length) ? 1 : 0;
+  const dataRows = S.arr.length + S.dep.length + sep;
+  const pageHeightMm = 277; // A4 - marges
+  const headerMm = 14;
+  const bottomTableMm = 42;
+  const tableHeaderMm = 8;
+  const rowHeightMm = 8.5;
+  const availableForRows = pageHeightMm - headerMm - bottomTableMm - tableHeaderMm;
+  const totalRowsFit = Math.floor(availableForRows / rowHeightMm);
+  const emptyCount = Math.max(3, totalRowsFit - dataRows);
+
+  for(let i=0;i<emptyCount;i++){
+    rows+=`<tr class="per">
+      <td></td>
+      <td></td>
+      <td class="col-arr">ARR</td>
+      <td class="col-pup">Pick up</td>
+      <td></td><td></td><td></td>
+    </tr>`;
   }
 
   document.getElementById('sh-rows').innerHTML=rows;
