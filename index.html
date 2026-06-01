@@ -413,29 +413,21 @@ function genPDF(){
     </tr>`;
   });
 
-  // Lignes vides — calcul dynamique pour que le tableau bas reste sur la même page
-  // A4 = 297mm, marges 10mm x2 = 277mm utiles
-  // En-tête page ~12mm
-  // Header tableau principal ~7mm
-  // Tableau bas total ~62mm (2 headers 8mm + 4 lignes 22pt×4 = ~31mm + marges + titre = ~62mm)
-  // Séparateur br ~3mm
-  // Total réservé = 12 + 7 + 62 + 3 = 84mm
-  // Dispo pour lignes données = 277 - 84 = 193mm
-  // Hauteur par ligne = 7.5mm
+  // 20 lignes fixes au total (données + vides)
+  const totalRows=20;
   const sep=(S.arr.length&&S.dep.length)?1:0;
   const dataRows=S.arr.length+S.dep.length+sep;
-  const totalFit=Math.floor(193/7.5); // ~25 lignes max
-  const emptyCount=Math.max(2,totalFit-dataRows);
+  const emptyCount=Math.max(0,totalRows-dataRows);
   for(let i=0;i<emptyCount;i++){
-    rows+=`<tr class="per" style="height:7.5mm"><td></td><td></td><td class="col-arr">ARR</td><td class="col-pup">Pick up</td><td></td><td></td><td></td></tr>`;
+    rows+=`<tr style="height:10mm"><td></td><td></td><td class="col-arr">ARR</td><td class="col-pup">Pick up</td><td></td><td></td><td></td></tr>`;
   }
   document.getElementById('sh-rows').innerHTML=rows;
 
-  // ── Tableau bas : Headset + Handling ─────────────────────────
+  // ── Tableau bas : 4 lignes fixes ─────────────────────────────
   const rentingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='renting');
   const handlingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='handling');
 
-  // Grouper les handling par registration pour combiner ARR+DEP sur même ligne
+  // Grouper handling par registration (ARR+DEP sur même ligne)
   const handlingMap={};
   handlingFlights.forEach(f=>{
     const key=f.reg||f.flight;
@@ -444,48 +436,38 @@ function genPDF(){
   });
   const handlingGroups=Object.values(handlingMap);
 
-  const maxRows=4;
-  let bottomRows='';
-
-  // Renting → uniquement colonne "Handling WFS", rien dans Headset
+  // Renting → seulement colonne "Handling WFS", Headset vide
   const rentLines=rentingFlights.map(f=>({
     hReg:f.reg||'',hFlt:f.flight,hDepArr:'',hWfs:f.reg||f.flight
   }));
 
-  // Handling → Registration + FLT + DEP//ARR divisée si besoin
+  // Handling → Registration + FLT + DEP//ARR
   const handLines=handlingGroups.map(g=>{
     const arr=g.flights.filter(f=>f.type==='arr');
     const dep=g.flights.filter(f=>f.type==='dep');
     let depArr='';
     if(arr.length&&dep.length){
-      depArr='SPLIT:A) '+arr[0].eta+'|D) '+dep[0].eta;
+      depArr=`A) ${arr[0].eta} / D) ${dep[0].eta}`;
     } else if(arr.length){
-      depArr='A) '+arr[0].eta;
+      depArr=`A) ${arr[0].eta}`;
     } else if(dep.length){
-      depArr='D) '+dep[0].eta;
+      depArr=`D) ${dep[0].eta}`;
     }
     const rep=g.flights[0];
     return{hReg:rep.reg||'',hFlt:g.flights.map(f=>f.flight).join(' / '),hDepArr:depArr,hWfs:''};
   });
 
   const allLines=[...rentLines,...handLines];
-  for(let i=0;i<maxRows;i++){
+  let bottomRows='';
+  for(let i=0;i<4;i++){
     const l=allLines[i]||{hReg:'',hFlt:'',hDepArr:'',hWfs:''};
-    let depArrCell='';
-    if(l.hDepArr&&l.hDepArr.startsWith('SPLIT:')){
-      const parts=l.hDepArr.replace('SPLIT:','').split('|');
-      depArrCell=`<td class="split-cell"><span class="split-top">${parts[0]||''}</span><span class="split-bot">${parts[1]||''}</span></td>`;
-    } else {
-      depArrCell=`<td class="single-cell">${l.hDepArr||''}</td>`;
-    }
-    // Headset toujours vide (renting et handling ne vont pas dans headset)
     bottomRows+=`<tr>
       <td></td><td></td><td></td>
       <td class="pdv"></td>
-      <td>${l.hReg||''}</td>
-      <td>${l.hFlt||''}</td>
-      ${depArrCell}
-      <td>${l.hWfs||''}</td>
+      <td>${l.hReg}</td>
+      <td>${l.hFlt}</td>
+      <td>${l.hDepArr}</td>
+      <td>${l.hWfs}</td>
     </tr>`;
   }
   document.getElementById('sh-bottom-rows').innerHTML=bottomRows;
