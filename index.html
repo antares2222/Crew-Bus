@@ -190,7 +190,7 @@ textarea:focus{border-color:#e8b84b}
       <th class="col-flt">Flight Number</th>
       <th class="col-arr">ARR</th>
       <th class="col-pup">Pick up</th>
-      <th class="col-time">Time (Local)</th>
+      <th class="col-time">Time</th>
       <th class="col-stand">Stand</th>
       <th class="col-note">Note</th>
     </tr></thead>
@@ -416,42 +416,6 @@ function genPDF(){
 
   // Injecter d'abord les données sans lignes vides
   document.getElementById('sh-rows').innerHTML=rows;
-
-  // ── Calcul dynamique des lignes vides ─────────────────────────
-  // On mesure l'espace restant APRÈS rendu, puis on ajoute des lignes
-  // tant qu'elles rentrent sans déborder sur le tableau bas
-  // On utilise requestAnimationFrame pour attendre le rendu
-  requestAnimationFrame(()=>{
-    const sheet=document.getElementById('sheet');
-    const ptTable=sheet.querySelector('table.pt');
-    const pbWrap=sheet.querySelector('.pb-wrap');
-
-    // Hauteur A4 en px à 96dpi = 297mm * 96/25.4 ≈ 1122px, marges 10mm*2 = 76px => 1046px
-    // On mesure directement
-    const pageH=1122-76; // px utilisables
-    const pbH=pbWrap.offsetHeight;
-    const ptBottom=ptTable.getBoundingClientRect().bottom;
-    const sheetTop=sheet.getBoundingClientRect().top;
-    const ptRelBottom=ptBottom-sheetTop;
-
-    // Espace disponible entre bas du tableau et début du tableau bas
-    // Hauteur d'une ligne vide
-    const testRow=document.createElement('tr');
-    testRow.innerHTML='<td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
-    ptTable.querySelector('tbody').appendChild(testRow);
-    const rowH=testRow.offsetHeight||10;
-    ptTable.querySelector('tbody').removeChild(testRow);
-
-    let available=pageH-ptRelBottom-pbH-8; // 8px marge sécurité
-    let emptyAdded=0;
-    while(available>=rowH){
-      const r=document.createElement('tr');
-      r.innerHTML=`<td></td><td></td><td class="col-arr" style="text-align:center;font-size:8pt;font-weight:bold">ARR</td><td class="col-pup" style="font-style:italic;font-size:9pt">Pick up</td><td></td><td></td><td></td>`;
-      ptTable.querySelector('tbody').appendChild(r);
-      emptyAdded++;
-      available-=rowH;
-    }
-  });
 
   // ── Tableau bas : 3 sections ──────────────────────────────────
   const rentingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='renting');
