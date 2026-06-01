@@ -212,12 +212,12 @@ textarea:focus{border-color:#e8b84b}
       <th style="width:9%">FLT #</th>
       <th style="width:10%">Depart</th>
       <td class="pdv"></td>
-      <th style="width:12%">Registration</th>
-      <th style="width:10%">FLT #</th>
+      <th style="width:13%">Registration</th>
+      <th style="width:11%">FLT #</th>
       <th style="width:9%">ARR</th>
       <th style="width:9%">DEP</th>
       <td class="pdv"></td>
-      <th style="width:11%">Registration</th>
+      <th style="width:13%">Registration</th>
     </tr>
     <tbody id="sh-bottom-rows"></tbody>
   </table>
@@ -415,7 +415,7 @@ function genPDF(){
   });
 
   // 20 lignes fixes au total (données + vides)
-  const totalRows=17;
+  const totalRows=22;
   const sep=(S.arr.length&&S.dep.length)?1:0;
   const dataRows=S.arr.length+S.dep.length+sep;
   const emptyCount=Math.max(0,totalRows-dataRows);
@@ -445,11 +445,11 @@ function genPDF(){
     const r=rentingFlights[i]||null;
 
     const hReg=h?h.flights[0].reg||'':'';
-    const hFlt=h?h.flights.map(f=>f.flight).join('//'):'';
+    // FLT# : vol de l'arrivée si présente, sinon du départ
+    const hFlt=h?(h.arr?h.arr.flight:h.dep?h.dep.flight:''):'';
     const hArr=h&&h.arr?h.arr.eta:'';
     const hDep=h&&h.dep?h.dep.eta:'';
-    const rentReg=r?r.reg||'':'';
-    const rentFlt=r?r.flight:'';
+    const rentReg=r?r.reg||r.flight:'';
 
     bottomRows+=`<tr>
       <td></td><td></td><td></td>
@@ -460,7 +460,6 @@ function genPDF(){
       <td${h&&!h.dep?' class="crossed"':''}>${hDep}</td>
       <td class="pdv"></td>
       <td>${rentReg}</td>
-      <td>${rentFlt}</td>
     </tr>`;
   }
   document.getElementById('sh-bottom-rows').innerHTML=bottomRows;
