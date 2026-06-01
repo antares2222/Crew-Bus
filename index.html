@@ -205,7 +205,7 @@ textarea:focus{border-color:#e8b84b}
       <td class="pdv"></td>
       <td colspan="4" class="psh">Handling</td>
       <td class="pdv"></td>
-      <td colspan="2" class="psh">Renting</td>
+      <td class="psh">Renting</td>
     </tr>
     <tr>
       <th style="width:11%">Registration</th>
@@ -217,8 +217,7 @@ textarea:focus{border-color:#e8b84b}
       <th style="width:9%">ARR</th>
       <th style="width:9%">DEP</th>
       <td class="pdv"></td>
-      <th style="width:9%">Reg.</th>
-      <th style="width:9%">FLT #</th>
+      <th style="width:11%">Registration</th>
     </tr>
     <tbody id="sh-bottom-rows"></tbody>
   </table>
@@ -416,7 +415,7 @@ function genPDF(){
   });
 
   // 20 lignes fixes au total (données + vides)
-  const totalRows=20;
+  const totalRows=17;
   const sep=(S.arr.length&&S.dep.length)?1:0;
   const dataRows=S.arr.length+S.dep.length+sep;
   const emptyCount=Math.max(0,totalRows-dataRows);
@@ -445,24 +444,23 @@ function genPDF(){
     const h=handlingGroups[i]||null;
     const r=rentingFlights[i]||null;
 
-    // Handling cols
     const hReg=h?h.flights[0].reg||'':'';
     const hFlt=h?h.flights.map(f=>f.flight).join('//'):'';
     const hArr=h&&h.arr?h.arr.eta:'';
     const hDep=h&&h.dep?h.dep.eta:'';
-
-    // Renting col
-    const rent=r?r.reg||r.flight:'';
+    const rentReg=r?r.reg||'':'';
+    const rentFlt=r?r.flight:'';
 
     bottomRows+=`<tr>
       <td></td><td></td><td></td>
       <td class="pdv"></td>
       <td>${hReg}</td>
       <td>${hFlt}</td>
-      <td${hArr===''?' class="crossed"':''}>${hArr}</td>
-      <td${hDep===''?' class="crossed"':''}>${hDep}</td>
+      <td${h&&!h.arr?' class="crossed"':''}>${hArr}</td>
+      <td${h&&!h.dep?' class="crossed"':''}>${hDep}</td>
       <td class="pdv"></td>
-      <td>${rent}</td>
+      <td>${rentReg}</td>
+      <td>${rentFlt}</td>
     </tr>`;
   }
   document.getElementById('sh-bottom-rows').innerHTML=bottomRows;
