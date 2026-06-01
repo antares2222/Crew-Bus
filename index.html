@@ -413,13 +413,18 @@ function genPDF(){
     </tr>`;
   });
 
-  // Lignes vides — calcul dynamique
-  // A4 277mm utiles. En-tête ~12mm, header tableau ~7mm, tableau bas ~55mm, séparateur ~4mm = ~78mm réservés
-  // Disponible pour les lignes = 277 - 78 = 199mm
-  // Hauteur par ligne ~7.5mm
+  // Lignes vides — calcul dynamique pour que le tableau bas reste sur la même page
+  // A4 = 297mm, marges 10mm x2 = 277mm utiles
+  // En-tête page ~12mm
+  // Header tableau principal ~7mm
+  // Tableau bas total ~62mm (2 headers 8mm + 4 lignes 22pt×4 = ~31mm + marges + titre = ~62mm)
+  // Séparateur br ~3mm
+  // Total réservé = 12 + 7 + 62 + 3 = 84mm
+  // Dispo pour lignes données = 277 - 84 = 193mm
+  // Hauteur par ligne = 7.5mm
   const sep=(S.arr.length&&S.dep.length)?1:0;
   const dataRows=S.arr.length+S.dep.length+sep;
-  const totalFit=Math.floor(199/7.5);
+  const totalFit=Math.floor(193/7.5); // ~25 lignes max
   const emptyCount=Math.max(2,totalFit-dataRows);
   for(let i=0;i<emptyCount;i++){
     rows+=`<tr class="per" style="height:7.5mm"><td></td><td></td><td class="col-arr">ARR</td><td class="col-pup">Pick up</td><td></td><td></td><td></td></tr>`;
@@ -427,12 +432,10 @@ function genPDF(){
   document.getElementById('sh-rows').innerHTML=rows;
 
   // ── Tableau bas : Headset + Handling ─────────────────────────
-  // Renting = vols WFS avec mode 'renting'
-  // Handling = vols WFS avec mode 'handling'
   const rentingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='renting');
   const handlingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='handling');
 
-  // Grouper les handling par registration pour combiner ARR+DEP
+  // Grouper les handling par registration pour combiner ARR+DEP sur même ligne
   const handlingMap={};
   handlingFlights.forEach(f=>{
     const key=f.reg||f.flight;
@@ -441,36 +444,33 @@ function genPDF(){
   });
   const handlingGroups=Object.values(handlingMap);
 
-  // Construire les lignes du tableau bas
-  // Max 4 lignes data (après les 2 headers)
   const maxRows=4;
   let bottomRows='';
 
-  // On remplit ligne par ligne : renting en col Renting (Handling WFS), handling en cols Handling
+  // Renting → uniquement colonne "Handling WFS", rien dans Headset
   const rentLines=rentingFlights.map(f=>({
-    reg:f.reg||'',flt:f.flight,depart:'',
-    hReg:'',hFlt:'',hDepArr:'',hWfs:f.reg||f.flight
+    hReg:f.reg||'',hFlt:f.flight,hDepArr:'',hWfs:f.reg||f.flight
   }));
+
+  // Handling → Registration + FLT + DEP//ARR divisée si besoin
   const handLines=handlingGroups.map(g=>{
     const arr=g.flights.filter(f=>f.type==='arr');
     const dep=g.flights.filter(f=>f.type==='dep');
     let depArr='';
     if(arr.length&&dep.length){
-      // Divisée en deux
-      depArr='SPLIT:A)'+arr[0].eta+'|D)'+dep[0].eta;
+      depArr='SPLIT:A) '+arr[0].eta+'|D) '+dep[0].eta;
     } else if(arr.length){
       depArr='A) '+arr[0].eta;
     } else if(dep.length){
       depArr='D) '+dep[0].eta;
     }
     const rep=g.flights[0];
-    return{reg:'',flt:'',depart:'',hReg:rep.reg||'',hFlt:g.flights.map(f=>f.flight).join(' / '),hDepArr:depArr,hWfs:''};
+    return{hReg:rep.reg||'',hFlt:g.flights.map(f=>f.flight).join(' / '),hDepArr:depArr,hWfs:''};
   });
 
-  // Fusionner : une ligne = une entrée renting OU handling
   const allLines=[...rentLines,...handLines];
   for(let i=0;i<maxRows;i++){
-    const l=allLines[i]||{reg:'',flt:'',depart:'',hReg:'',hFlt:'',hDepArr:'',hWfs:''};
+    const l=allLines[i]||{hReg:'',hFlt:'',hDepArr:'',hWfs:''};
     let depArrCell='';
     if(l.hDepArr&&l.hDepArr.startsWith('SPLIT:')){
       const parts=l.hDepArr.replace('SPLIT:','').split('|');
@@ -478,10 +478,9 @@ function genPDF(){
     } else {
       depArrCell=`<td class="single-cell">${l.hDepArr||''}</td>`;
     }
+    // Headset toujours vide (renting et handling ne vont pas dans headset)
     bottomRows+=`<tr>
-      <td>${l.reg||''}</td>
-      <td>${l.flt||''}</td>
-      <td>${l.depart||''}</td>
+      <td></td><td></td><td></td>
       <td class="pdv"></td>
       <td>${l.hReg||''}</td>
       <td>${l.hFlt||''}</td>
