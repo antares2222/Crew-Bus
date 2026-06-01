@@ -205,19 +205,20 @@ textarea:focus{border-color:#e8b84b}
       <td class="pdv"></td>
       <td colspan="4" class="psh">Handling</td>
       <td class="pdv"></td>
-      <td class="psh">Renting</td>
+      <td colspan="2" class="psh">Renting</td>
     </tr>
     <tr>
       <th style="width:11%">Registration</th>
       <th style="width:9%">FLT #</th>
       <th style="width:10%">Depart</th>
       <td class="pdv"></td>
-      <th style="width:11%">Registration</th>
+      <th style="width:12%">Registration</th>
       <th style="width:10%">FLT #</th>
-      <th style="width:10%">ARR</th>
-      <th style="width:10%">DEP</th>
+      <th style="width:9%">ARR</th>
+      <th style="width:9%">DEP</th>
       <td class="pdv"></td>
-      <th style="width:10%">Registration</th>
+      <th style="width:9%">Reg.</th>
+      <th style="width:9%">FLT #</th>
     </tr>
     <tbody id="sh-bottom-rows"></tbody>
   </table>
@@ -424,51 +425,44 @@ function genPDF(){
   }
   document.getElementById('sh-rows').innerHTML=rows;
 
-  // ── Tableau bas : 4 lignes fixes ─────────────────────────────
+  // ── Tableau bas : 3 sections ──────────────────────────────────
   const rentingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='renting');
   const handlingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='handling');
 
-  // Grouper handling par registration (ARR+DEP sur même ligne)
+  // Grouper handling par registration
   const handlingMap={};
   handlingFlights.forEach(f=>{
     const key=f.reg||f.flight;
-    if(!handlingMap[key])handlingMap[key]={reg:f.reg,flights:[]};
+    if(!handlingMap[key])handlingMap[key]={reg:f.reg,arr:null,dep:null,flights:[]};
     handlingMap[key].flights.push(f);
+    if(f.type==='arr')handlingMap[key].arr=f;
+    else handlingMap[key].dep=f;
   });
   const handlingGroups=Object.values(handlingMap);
 
-  // Renting → seulement colonne "Handling WFS", Headset vide
-  const rentLines=rentingFlights.map(f=>({
-    hReg:f.reg||'',hFlt:f.flight,hDepArr:'',hWfs:f.reg||f.flight
-  }));
-
-  // Handling → Registration + FLT + DEP//ARR
-  const handLines=handlingGroups.map(g=>{
-    const arr=g.flights.filter(f=>f.type==='arr');
-    const dep=g.flights.filter(f=>f.type==='dep');
-    let depArr='';
-    if(arr.length&&dep.length){
-      depArr=`A) ${arr[0].eta} / D) ${dep[0].eta}`;
-    } else if(arr.length){
-      depArr=`A) ${arr[0].eta}`;
-    } else if(dep.length){
-      depArr=`D) ${dep[0].eta}`;
-    }
-    const rep=g.flights[0];
-    return{hReg:rep.reg||'',hFlt:g.flights.map(f=>f.flight).join(' / '),hDepArr:depArr,hWfs:''};
-  });
-
-  const allLines=[...rentLines,...handLines];
   let bottomRows='';
   for(let i=0;i<4;i++){
-    const l=allLines[i]||{hReg:'',hFlt:'',hDepArr:'',hWfs:''};
+    const h=handlingGroups[i]||null;
+    const r=rentingFlights[i]||null;
+
+    // Handling cols
+    const hReg=h?h.flights[0].reg||'':'';
+    const hFlt=h?h.flights.map(f=>f.flight).join('//'):'';
+    const hArr=h&&h.arr?h.arr.eta:'';
+    const hDep=h&&h.dep?h.dep.eta:'';
+
+    // Renting col
+    const rent=r?r.reg||r.flight:'';
+
     bottomRows+=`<tr>
       <td></td><td></td><td></td>
       <td class="pdv"></td>
-      <td>${l.hReg}</td>
-      <td>${l.hFlt}</td>
-      <td>${l.hDepArr}</td>
-      <td>${l.hWfs}</td>
+      <td>${hReg}</td>
+      <td>${hFlt}</td>
+      <td${hArr===''?' class="crossed"':''}>${hArr}</td>
+      <td${hDep===''?' class="crossed"':''}>${hDep}</td>
+      <td class="pdv"></td>
+      <td>${rent}</td>
     </tr>`;
   }
   document.getElementById('sh-bottom-rows').innerHTML=bottomRows;
