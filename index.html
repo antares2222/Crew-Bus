@@ -55,8 +55,6 @@ textarea:focus{border-color:#e8b84b}
 .fi-bx{font-family:'Bebas Neue',sans-serif;font-size:10px;padding:2px 6px;border-radius:4px;letter-spacing:1px}
 .fi-bx.a{background:rgba(75,232,160,.15);color:#4be8a0}
 .fi-bx.d{background:rgba(232,75,75,.15);color:#e84b4b}
-
-/* WFS toggle */
 .wfs-toggle{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid #2a2d36}
 .wfs-btn{flex:1;padding:7px 4px;border-radius:6px;border:1px solid #2a2d36;background:#0a0a0a;color:#6b7280;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;text-align:center;transition:all .2s}
 .wfs-btn.sel-rent{border-color:#e8b84b;color:#e8b84b;background:rgba(232,184,75,.1)}
@@ -65,38 +63,29 @@ textarea:focus{border-color:#e8b84b}
 /* PRINT */
 #sheet{display:none}
 @media print{
-  #sheet{display:block;position:relative;min-height:277mm}
+  #sheet{display:block}
   body>*:not(#sheet){display:none!important}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{background:white;color:black;padding:0;font-family:Arial,sans-serif;font-size:10pt}
   @page{size:A4 portrait;margin:10mm}
-
   .ph{display:flex;align-items:stretch;border:1.5pt solid black;margin-bottom:0}
   .ph-l{flex:1;padding:6pt 10pt;font-size:11pt;border-right:1pt solid black}
   .ph-m{padding:6pt 16pt;font-size:11pt;font-weight:bold;text-align:center;display:flex;align-items:center;white-space:nowrap}
   .ph-r{flex:1;padding:6pt 10pt}
-
   table.pt{width:100%;border-collapse:collapse}
   table.pt th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
   table.pt td{border:1pt solid black;padding:4pt 5pt;vertical-align:middle}
-
-  .col-reg{width:13%}
-  .col-flt{width:13%}
+  .col-reg{width:13%}.col-flt{width:13%}
   .col-arr{width:7%;text-align:center;font-size:8pt;font-weight:bold}
   .col-pup{width:10%;font-style:italic;font-size:9pt}
-  .col-time{width:10%}
-  .col-stand{width:7%;text-align:center}
-  .col-note{width:26%}
+  .col-time{width:10%}.col-stand{width:7%;text-align:center}.col-note{width:26%}
   .font-lg{font-size:12pt}
-
   .badge-arr{display:inline-block;border:1.5pt solid #2d7a2d;border-radius:3pt;padding:1pt 4pt;font-size:7pt;font-weight:bold;background:#d4edda;color:#1a5c1a}
   .badge-pup{display:inline-block;border:1.5pt solid #c0392b;border-radius:3pt;padding:1pt 5pt;font-size:8pt;font-style:italic;background:#fde8e8;color:#7b1010;white-space:nowrap}
-
   .psep td{background:#f0f0f0;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt;border:1pt solid black}
-
-  /* Tableau bas — fixé en bas de page */
-  .pb-wrap{position:fixed;bottom:0;left:10mm;right:10mm}
-  table.pb{width:100%;border-collapse:collapse}
+  .per{height:9.5mm}
+  .per td{border:1pt solid black}
+  table.pb{width:100%;border-collapse:collapse;margin-top:8pt}
   table.pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
   table.pb td{border:1pt solid black;padding:4pt;vertical-align:middle;text-align:center;font-size:9pt}
   .pdv{background:black!important;width:2pt;padding:0;border:none;max-width:2pt}
@@ -118,7 +107,6 @@ textarea:focus{border-color:#e8b84b}
   </div>
 </div>
 
-<!-- STEP 0 -->
 <div class="sec show" id="s0">
   <div class="lbl">01 — INFOS DU SHIFT</div>
   <div class="card">
@@ -138,7 +126,6 @@ textarea:focus{border-color:#e8b84b}
   <button class="btn bp" onclick="go(1)">SUIVANT →</button>
 </div>
 
-<!-- STEP 1 -->
 <div class="sec" id="s1">
   <div class="lbl">02 — COLLER LES VOLS</div>
   <div class="tip">
@@ -160,7 +147,6 @@ textarea:focus{border-color:#e8b84b}
   </div>
 </div>
 
-<!-- STEP 2 -->
 <div class="sec" id="s2">
   <div class="lbl">03 — VÉRIFICATION</div>
   <div class="card">
@@ -177,7 +163,6 @@ textarea:focus{border-color:#e8b84b}
   </div>
 </div>
 
-<!-- FEUILLE PRINT -->
 <div id="sheet">
   <div class="ph">
     <div class="ph-l" id="sh-date"></div>
@@ -197,7 +182,6 @@ textarea:focus{border-color:#e8b84b}
     <tbody id="sh-rows"></tbody>
   </table>
   <br>
-  <div class="pb-wrap">
   <table class="pb" id="sh-bottom">
     <tr>
       <td colspan="3" class="psh">Headset</td>
@@ -220,54 +204,23 @@ textarea:focus{border-color:#e8b84b}
     </tr>
     <tbody id="sh-bottom-rows"></tbody>
   </table>
-  </div>
 </div>
 
 <script>
 const S={shift:'NIGHT',arr:[],dep:[]};
 const HL=['WFS','CHALLENGE','SWISSPORT','BAS','FEDEX','AVIAPARTNER'];
 const AC=/^(B7[0-9]{2}[LW]?|A3[0-9]{2}|B738|B763|B744|B748|A306|A332|A333|B734|B752|A321|B77[LW]|AT7[0-9]|CRJ|E[0-9]{3}|C25[ABC]|DA4[0-9]|PC1[0-9]|GLF4?|FA7X|LJ45|C510|C680)$/i;
-
 document.getElementById('sDate').value=new Date().toISOString().slice(0,10);
-
-function go(n){
-  document.querySelectorAll('.sec').forEach((s,i)=>s.classList.toggle('show',i===n));
-  document.querySelectorAll('.dot').forEach((d,i)=>{d.classList.toggle('on',i===n);d.classList.toggle('done',i<n);});
-  window.scrollTo(0,0);
-}
+function go(n){document.querySelectorAll('.sec').forEach((s,i)=>s.classList.toggle('show',i===n));document.querySelectorAll('.dot').forEach((d,i)=>{d.classList.toggle('on',i===n);d.classList.toggle('done',i<n);});window.scrollTo(0,0);}
 function selShift(s,el){S.shift=s;document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
 function reset(){S.arr=[];S.dep=[];document.getElementById('tFids').value='';go(0);}
-
-function shouldInclude(flight,raw){
-  if(!raw)return false;
-  const r=raw.toUpperCase().trim();
-  if(r==='CHALLENGE'||r==='WFS')return true;
-  if(r==='SWISSPORT'&&flight.toUpperCase().startsWith('TAY'))return true;
-  return false;
-}
-function pickup(t){
-  const[h,m]=t.split(':').map(Number);
-  let x=h*60+m-75;if(x<0)x+=1440;
-  return String(Math.floor(x/60)%24).padStart(2,'0')+':'+String(x%60).padStart(2,'0');
-}
-function inWinArr(t){
-  if(!t||!/^\d{1,2}:\d{2}$/.test(t))return false;
-  const[h,m]=t.split(':').map(Number),mins=h*60+m;
-  if(S.shift==='NIGHT')return mins>=22*60||mins<6*60;
-  if(S.shift==='EARLY')return mins>=6*60&&mins<14*60;
-  return mins>=14*60&&mins<22*60;
-}
+function shouldInclude(flight,raw){if(!raw)return false;const r=raw.toUpperCase().trim();if(r==='CHALLENGE'||r==='WFS')return true;if(r==='SWISSPORT'&&flight.toUpperCase().startsWith('TAY'))return true;return false;}
+function pickup(t){const[h,m]=t.split(':').map(Number);let x=h*60+m-75;if(x<0)x+=1440;return String(Math.floor(x/60)%24).padStart(2,'0')+':'+String(x%60).padStart(2,'0');}
+function inWinArr(t){if(!t||!/^\d{1,2}:\d{2}$/.test(t))return false;const[h,m]=t.split(':').map(Number),mins=h*60+m;if(S.shift==='NIGHT')return mins>=22*60||mins<6*60;if(S.shift==='EARLY')return mins>=6*60&&mins<14*60;return mins>=14*60&&mins<22*60;}
 function inWinDep(t){return inWinArr(pickup(t));}
 function isOACI(s){return/^[EBLFKOGZDRUYCNHPWVTSBCP][A-Z]{3}$/.test(s)&&!/\d/.test(s);}
-function isReg(s){
-  if(!s||s.length<4||s.length>8)return false;
-  if(!/^[A-Z0-9]+$/.test(s)||/^\d+$/.test(s))return false;
-  if(isOACI(s)||AC.test(s)||HL.includes(s))return false;
-  if(/^\d+[A-Z]?$/.test(s)&&s.length<=4)return false;
-  return/\d/.test(s)||/^(OE|TF|OO|9H|EI|N[0-9]|G|F|D|PH|SE|OH|LN|SP|HA|YR|LZ|CS|EC|TC|SU|ET|5Y|VT|B|JA|HL|A6|A7|EK|UK|UR|4X)/i.test(s);
-}
+function isReg(s){if(!s||s.length<4||s.length>8)return false;if(!/^[A-Z0-9]+$/.test(s)||/^\d+$/.test(s))return false;if(isOACI(s)||AC.test(s)||HL.includes(s))return false;if(/^\d+[A-Z]?$/.test(s)&&s.length<=4)return false;return/\d/.test(s)||/^(OE|TF|OO|9H|EI|N[0-9]|G|F|D|PH|SE|OH|LN|SP|HA|YR|LZ|CS|EC|TC|SU|ET|5Y|VT|B|JA|HL|A6|A7|EK|UK|UR|4X)/i.test(s);}
 function isStand(s){return/^\d{1,3}[A-Z]?$/.test(s)&&parseInt(s)<200;}
-
 function parseFids(text){
   const arrivals=[],departures=[],seen=new Set();
   const lines=text.split('\n').map(l=>l.trim()).filter(l=>l.length>5);
@@ -288,52 +241,32 @@ function parseFids(text){
     else{const idx=tokens.indexOf('EBLG');type=(idx!==-1&&idx<tokens.length/2)?'dep':'arr';}
     if(type==='arr'&&!inWinArr(eta))continue;
     if(type==='dep'&&!inWinDep(eta))continue;
-    let hw='';
-    for(const h of HL){if(upper.includes(h)){hw=h;break;}}
-    let flight='';
-    for(const t of tokens){if(/^[A-Z]{1,3}\d{3,5}[A-Z]?$/.test(t)&&!/^\d+$/.test(t)){flight=t;break;}}
+    let hw='';for(const h of HL){if(upper.includes(h)){hw=h;break;}}
+    let flight='';for(const t of tokens){if(/^[A-Z]{1,3}\d{3,5}[A-Z]?$/.test(t)&&!/^\d+$/.test(t)){flight=t;break;}}
     if(!flight)continue;
     if(!shouldInclude(flight,hw))continue;
     if(seen.has(flight))continue;
     seen.add(flight);
     let reg='';
-    for(const t of tokens){
-      if(t===flight||/^\d{1,2}:\d{2}$/.test(t)||/^\d{2}\//.test(t))continue;
-      if(HL.includes(t.toUpperCase())||t==='EBLG')continue;
-      if(isStand(t))continue;
-      if(isReg(t)){reg=t;break;}
-    }
-    let stand='';
-    for(const t of tokens){if(isStand(t)&&t!==reg){stand=t;break;}}
-    // wfsMode: null (non-WFS), 'renting', 'handling' — défaut 'handling' pour WFS
+    for(const t of tokens){if(t===flight||/^\d{1,2}:\d{2}$/.test(t)||/^\d{2}\//.test(t))continue;if(HL.includes(t.toUpperCase())||t==='EBLG')continue;if(isStand(t))continue;if(isReg(t)){reg=t;break;}}
+    let stand='';for(const t of tokens){if(isStand(t)&&t!==reg){stand=t;break;}}
     const wfsMode=hw.toUpperCase()==='WFS'?'handling':null;
     const obj={flight,reg,eta,time:type==='dep'?pickup(eta):eta,handler:hw,stand,type,wfsMode};
-    if(type==='dep')departures.push(obj);
-    else arrivals.push(obj);
+    if(type==='dep')departures.push(obj);else arrivals.push(obj);
   }
   return{arrivals,departures};
 }
-
 function doAnalyse(){
   const t=document.getElementById('tFids').value;
   if(!t.trim()){alert('Colle le texte du FIDS d\'abord.');return;}
   const{arrivals,departures}=parseFids(t);
   S.arr=arrivals;S.dep=departures;
   const total=arrivals.length+departures.length;
-  if(!total){
-    document.getElementById('iInfo').innerHTML=`<span class="err">⚠ Aucun vol détecté (shift ${S.shift}).</span>`;
-    return;
-  }
+  if(!total){document.getElementById('iInfo').innerHTML=`<span class="err">⚠ Aucun vol détecté (shift ${S.shift}).</span>`;return;}
   document.getElementById('iInfo').innerHTML=`<span class="ok">✓ ${arrivals.length} arrivée(s) + ${departures.length} départ(s)</span>`;
   renderPreview();go(2);
 }
-
-function setWfs(flight,mode){
-  // Chercher dans arr et dep
-  [...S.arr,...S.dep].forEach(f=>{if(f.flight===flight)f.wfsMode=mode;});
-  renderPreview();
-}
-
+function setWfs(flight,mode){[...S.arr,...S.dep].forEach(f=>{if(f.flight===flight)f.wfsMode=mode;});renderPreview();}
 function renderPreview(){
   document.getElementById('cA').textContent=S.arr.length;
   document.getElementById('cD').textContent=S.dep.length;
@@ -342,159 +275,63 @@ function renderPreview(){
     h+=`<div class="grp a">✈ ARRIVÉES (${S.arr.length})</div>`;
     S.arr.forEach(f=>{
       const isWfs=f.handler.toUpperCase()==='WFS';
-      h+=`<div class="fi a">
-        <div class="fi-top">
-          <div class="fi-t">${f.time}</div>
-          <div class="fi-b">
-            <div class="fi-f">${f.flight}</div>
-            <div class="fi-r">${f.reg||'—'} · ${f.handler}${f.stand?' · Stand '+f.stand:''}</div>
-          </div>
-          <div class="fi-bx a">ARR</div>
-        </div>
-        ${isWfs?`<div class="wfs-toggle">
-          <button class="wfs-btn ${f.wfsMode==='renting'?'sel-rent':''}" onclick="setWfs('${f.flight}','renting')">🚙 Renting</button>
-          <button class="wfs-btn ${f.wfsMode==='handling'?'sel-hand':''}" onclick="setWfs('${f.flight}','handling')">✈️ Handling</button>
-        </div>`:''}
-      </div>`;
+      h+=`<div class="fi a"><div class="fi-top"><div class="fi-t">${f.time}</div><div class="fi-b"><div class="fi-f">${f.flight}</div><div class="fi-r">${f.reg||'—'} · ${f.handler}${f.stand?' · Stand '+f.stand:''}</div></div><div class="fi-bx a">ARR</div></div>${isWfs?`<div class="wfs-toggle"><button class="wfs-btn ${f.wfsMode==='renting'?'sel-rent':''}" onclick="setWfs('${f.flight}','renting')">🚙 Renting</button><button class="wfs-btn ${f.wfsMode==='handling'?'sel-hand':''}" onclick="setWfs('${f.flight}','handling')">✈️ Handling</button></div>`:''}</div>`;
     });
   }
   if(S.dep.length){
     h+=`<div class="grp d">✈ DÉPARTS — pick up = ETD-1h15 (${S.dep.length})</div>`;
     S.dep.forEach(f=>{
       const isWfs=f.handler.toUpperCase()==='WFS';
-      h+=`<div class="fi d">
-        <div class="fi-top">
-          <div class="fi-t">${f.time}<div class="fi-etd">ETD ${f.eta}</div></div>
-          <div class="fi-b">
-            <div class="fi-f">${f.flight}</div>
-            <div class="fi-r">${f.reg||'—'} · ${f.handler}${f.stand?' · Stand '+f.stand:''}</div>
-          </div>
-          <div class="fi-bx d">DEP</div>
-        </div>
-        ${isWfs?`<div class="wfs-toggle">
-          <button class="wfs-btn ${f.wfsMode==='renting'?'sel-rent':''}" onclick="setWfs('${f.flight}','renting')">🚙 Renting</button>
-          <button class="wfs-btn ${f.wfsMode==='handling'?'sel-hand':''}" onclick="setWfs('${f.flight}','handling')">✈️ Handling</button>
-        </div>`:''}
-      </div>`;
+      h+=`<div class="fi d"><div class="fi-top"><div class="fi-t">${f.time}<div class="fi-etd">ETD ${f.eta}</div></div><div class="fi-b"><div class="fi-f">${f.flight}</div><div class="fi-r">${f.reg||'—'} · ${f.handler}${f.stand?' · Stand '+f.stand:''}</div></div><div class="fi-bx d">DEP</div></div>${isWfs?`<div class="wfs-toggle"><button class="wfs-btn ${f.wfsMode==='renting'?'sel-rent':''}" onclick="setWfs('${f.flight}','renting')">🚙 Renting</button><button class="wfs-btn ${f.wfsMode==='handling'?'sel-hand':''}" onclick="setWfs('${f.flight}','handling')">✈️ Handling</button></div>`:''}</div>`;
     });
   }
   if(!h)h=`<div style="color:#6b7280;text-align:center;padding:20px;font-size:13px">Aucun vol</div>`;
   document.getElementById('prev').innerHTML=h;
 }
-
 function genPDF(){
   const dateVal=document.getElementById('sDate').value;
   const dl=dateVal?dateVal.split('-').reverse().join('/'):'—';
   document.getElementById('sh-date').textContent='Crew bus service   '+dl;
   document.getElementById('sh-shift').innerHTML='EARLY // LATE // <u><b>'+S.shift+'</b></u>';
-
-  // ── Tableau principal ─────────────────────────────────────────
   let rows='';
-  S.arr.forEach(f=>{
-    rows+=`<tr>
-      <td class="col-reg font-lg">${f.reg||''}</td>
-      <td class="col-flt font-lg">${f.flight}</td>
-      <td class="col-arr"><span class="badge-arr">ARR</span></td>
-      <td class="col-pup">Pick up</td>
-      <td class="col-time font-lg">${f.time}</td>
-      <td class="col-stand">${f.stand||''}</td>
-      <td class="col-note"></td>
-    </tr>`;
-  });
+  S.arr.forEach(f=>{rows+=`<tr><td class="col-reg font-lg">${f.reg||''}</td><td class="col-flt font-lg">${f.flight}</td><td class="col-arr"><span class="badge-arr">ARR</span></td><td class="col-pup">Pick up</td><td class="col-time font-lg">${f.time}</td><td class="col-stand">${f.stand||''}</td><td class="col-note"></td></tr>`;});
   if(S.arr.length&&S.dep.length)rows+=`<tr class="psep"><td colspan="7">— DÉPARTS —</td></tr>`;
-  S.dep.forEach(f=>{
-    rows+=`<tr>
-      <td class="col-reg font-lg">${f.reg||''}</td>
-      <td class="col-flt font-lg">${f.flight}</td>
-      <td class="col-arr">ARR</td>
-      <td class="col-pup"><span class="badge-pup">Pick up</span></td>
-      <td class="col-time font-lg">${f.time}</td>
-      <td class="col-stand">${f.stand||''}</td>
-      <td class="col-note"></td>
-    </tr>`;
-  });
-
-  // Injecter d'abord les données sans lignes vides
+  S.dep.forEach(f=>{rows+=`<tr><td class="col-reg font-lg">${f.reg||''}</td><td class="col-flt font-lg">${f.flight}</td><td class="col-arr">ARR</td><td class="col-pup"><span class="badge-pup">Pick up</span></td><td class="col-time font-lg">${f.time}</td><td class="col-stand">${f.stand||''}</td><td class="col-note"></td></tr>`;});
+  // Calcul précis des lignes vides
+  // A4 277mm utiles (297 - 2x10mm marges) = ~1047px à 96dpi
+  // En-tête (ph) : ~14mm = ~53px
+  // Header tableau pt : ~8mm = ~30px  
+  // Tableau bas (pb) : ~55mm = ~208px
+  // Séparateur br : ~5mm = ~19px
+  // Disponible pour lignes = 1047 - 53 - 30 - 208 - 19 = ~737px
+  // Chaque ligne de données : ~9.5mm = ~36px
+  const PX_AVAILABLE = 737;
+  const PX_ROW = 36;
+  const sep=(S.arr.length&&S.dep.length)?1:0;
+  const dataRows=S.arr.length+S.dep.length+sep;
+  const totalFit=Math.floor(PX_AVAILABLE/PX_ROW);
+  const emptyCount=Math.max(0,totalFit-dataRows);
+  for(let i=0;i<emptyCount;i++){rows+=`<tr class="per"><td></td><td></td><td class="col-arr">ARR</td><td class="col-pup">Pick up</td><td></td><td></td><td></td></tr>`;}
   document.getElementById('sh-rows').innerHTML=rows;
-
-  // ── Calcul dynamique des lignes vides ─────────────────────────
-  // On mesure l'espace restant APRÈS rendu, puis on ajoute des lignes
-  // tant qu'elles rentrent sans déborder sur le tableau bas
-  // On utilise requestAnimationFrame pour attendre le rendu
-  requestAnimationFrame(()=>{
-    const sheet=document.getElementById('sheet');
-    const ptTable=sheet.querySelector('table.pt');
-    const pbWrap=sheet.querySelector('.pb-wrap');
-
-    // Hauteur A4 en px à 96dpi = 297mm * 96/25.4 ≈ 1122px, marges 10mm*2 = 76px => 1046px
-    // On mesure directement
-    const pageH=1122-76; // px utilisables
-    const pbH=pbWrap.offsetHeight;
-    const ptBottom=ptTable.getBoundingClientRect().bottom;
-    const sheetTop=sheet.getBoundingClientRect().top;
-    const ptRelBottom=ptBottom-sheetTop;
-
-    // Espace disponible entre bas du tableau et début du tableau bas
-    // Hauteur d'une ligne vide
-    const testRow=document.createElement('tr');
-    testRow.innerHTML='<td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
-    ptTable.querySelector('tbody').appendChild(testRow);
-    const rowH=testRow.offsetHeight||10;
-    ptTable.querySelector('tbody').removeChild(testRow);
-
-    let available=pageH-ptRelBottom-pbH-8; // 8px marge sécurité
-    let emptyAdded=0;
-    while(available>=rowH){
-      const r=document.createElement('tr');
-      r.innerHTML=`<td></td><td></td><td class="col-arr" style="text-align:center;font-size:8pt;font-weight:bold">ARR</td><td class="col-pup" style="font-style:italic;font-size:9pt">Pick up</td><td></td><td></td><td></td>`;
-      ptTable.querySelector('tbody').appendChild(r);
-      emptyAdded++;
-      available-=rowH;
-    }
-  });
-
-  // ── Tableau bas : 3 sections ──────────────────────────────────
+  // Tableau bas
   const rentingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='renting');
   const handlingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='handling');
-
-  // Grouper handling par registration
   const handlingMap={};
-  handlingFlights.forEach(f=>{
-    const key=f.reg||f.flight;
-    if(!handlingMap[key])handlingMap[key]={reg:f.reg,arr:null,dep:null,flights:[]};
-    handlingMap[key].flights.push(f);
-    if(f.type==='arr')handlingMap[key].arr=f;
-    else handlingMap[key].dep=f;
-  });
+  handlingFlights.forEach(f=>{const key=f.reg||f.flight;if(!handlingMap[key])handlingMap[key]={reg:f.reg,arr:null,dep:null,flights:[]};handlingMap[key].flights.push(f);if(f.type==='arr')handlingMap[key].arr=f;else handlingMap[key].dep=f;});
   const handlingGroups=Object.values(handlingMap);
-
   let bottomRows='';
   for(let i=0;i<4;i++){
     const h=handlingGroups[i]||null;
     const r=rentingFlights[i]||null;
-
     const hReg=h?h.flights[0].reg||'':'';
-    // FLT# : uniquement le vol ARR si présent, sinon DEP
     const hFlt=h?(h.arr?h.arr.flight:(h.dep?h.dep.flight:'')):'';
     const hArr=h&&h.arr?h.arr.eta:'';
     const hDep=h&&h.dep?h.dep.eta:'';
     const rentReg=r?r.reg||r.flight:'';
-
-    bottomRows+=`<tr>
-      <td></td><td></td><td></td>
-      <td class="pdv"></td>
-      <td>${hReg}</td>
-      <td>${hFlt}</td>
-      <td${h&&!h.arr?' class="crossed"':''}>${hArr}</td>
-      <td${h&&!h.dep?' class="crossed"':''}>${hDep}</td>
-      <td class="pdv"></td>
-      <td>${rentReg}</td>
-    </tr>`;
+    bottomRows+=`<tr><td></td><td></td><td></td><td class="pdv"></td><td>${hReg}</td><td>${hFlt}</td><td${h&&!h.arr?' class="crossed"':''}>${hArr}</td><td${h&&!h.dep?' class="crossed"':''}>${hDep}</td><td class="pdv"></td><td>${rentReg}</td></tr>`;
   }
   document.getElementById('sh-bottom-rows').innerHTML=bottomRows;
-
-  // Lancer l'impression après le calcul des lignes vides
-  setTimeout(()=>window.print(), 300);
+  window.print();
 }
 </script>
 </body>
