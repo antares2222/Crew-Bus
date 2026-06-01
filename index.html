@@ -99,11 +99,9 @@ textarea:focus{border-color:#e8b84b}
   table.pb{width:100%;border-collapse:collapse;margin-top:8pt}
   table.pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
   table.pb td{border:1pt solid black;padding:4pt;vertical-align:middle;text-align:center;font-size:9pt}
-  .pdv{background:black!important;width:3pt;padding:0;border:none}
+  .pdv{background:black!important;width:2pt;padding:0;border:none;max-width:2pt}
   .psh{font-weight:bold;font-size:9pt;text-align:center;padding:5pt;border:1pt solid black}
-  /* Cellule barrée */
-  .crossed{background: repeating-linear-gradient(45deg,#ddd,#ddd 1pt,white 1pt,white 4pt);}
-  /* Hauteur rangées tableau bas */
+  .crossed{background:repeating-linear-gradient(45deg,#ddd,#ddd 1pt,white 1pt,white 4pt);}
   table.pb tr{height:18pt}
 }
 </style>
@@ -208,16 +206,16 @@ textarea:focus{border-color:#e8b84b}
       <td class="psh">Renting</td>
     </tr>
     <tr>
-      <th style="width:11%">Registration</th>
-      <th style="width:9%">FLT #</th>
-      <th style="width:10%">Depart</th>
+      <th style="width:13%">Registration</th>
+      <th style="width:10%">FLT #</th>
+      <th style="width:11%">Depart</th>
       <td class="pdv"></td>
       <th style="width:13%">Registration</th>
       <th style="width:11%">FLT #</th>
       <th style="width:9%">ARR</th>
       <th style="width:9%">DEP</th>
       <td class="pdv"></td>
-      <th style="width:13%">Registration</th>
+      <th style="width:11%"></th>
     </tr>
     <tbody id="sh-bottom-rows"></tbody>
   </table>
@@ -445,8 +443,8 @@ function genPDF(){
     const r=rentingFlights[i]||null;
 
     const hReg=h?h.flights[0].reg||'':'';
-    // FLT# : vol de l'arrivée si présente, sinon du départ
-    const hFlt=h?(h.arr?h.arr.flight:h.dep?h.dep.flight:''):'';
+    // FLT# : uniquement le vol ARR si présent, sinon DEP
+    const hFlt=h?(h.arr?h.arr.flight:(h.dep?h.dep.flight:'')):'';
     const hArr=h&&h.arr?h.arr.eta:'';
     const hDep=h&&h.dep?h.dep.eta:'';
     const rentReg=r?r.reg||r.flight:'';
