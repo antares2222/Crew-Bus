@@ -43,9 +43,10 @@ textarea:focus{border-color:#e8b84b}
 .grp{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:3px;padding:8px 0 5px;display:flex;align-items:center;gap:8px}
 .grp::after{content:'';flex:1;height:1px;background:#2a2d36}
 .grp.a{color:#4be8a0}.grp.d{color:#e84b4b}
-.fi{border:1px solid #2a2d36;border-radius:8px;padding:9px 12px;margin-bottom:5px;display:flex;align-items:center;gap:10px}
+.fi{border:1px solid #2a2d36;border-radius:8px;padding:9px 12px;margin-bottom:5px}
 .fi.a{border-left:3px solid #4be8a0;background:rgba(75,232,160,.04)}
 .fi.d{border-left:3px solid #e84b4b;background:rgba(232,75,75,.04)}
+.fi-top{display:flex;align-items:center;gap:10px}
 .fi-t{font-family:'Bebas Neue',sans-serif;font-size:21px;color:#e8b84b;min-width:50px}
 .fi-etd{font-size:9px;color:#6b7280;font-family:'DM Mono',monospace}
 .fi-b{flex:1}
@@ -54,15 +55,14 @@ textarea:focus{border-color:#e8b84b}
 .fi-bx{font-family:'Bebas Neue',sans-serif;font-size:10px;padding:2px 6px;border-radius:4px;letter-spacing:1px}
 .fi-bx.a{background:rgba(75,232,160,.15);color:#4be8a0}
 .fi-bx.d{background:rgba(232,75,75,.15);color:#e84b4b}
-.tog-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #2a2d36}
-.tog-row:last-child{border-bottom:none}
-.tl{font-size:13px}.ts{font-size:11px;color:#6b7280;margin-top:2px;font-family:'DM Mono',monospace}
-.tog{width:44px;height:26px;border-radius:13px;background:#2a2d36;border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
-.tog.on{background:#4be8a0}
-.tog::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:3px;left:3px;transition:left .2s}
-.tog.on::after{left:21px}
 
-/* ══ PRINT ══════════════════════════════════════════════════════ */
+/* WFS toggle */
+.wfs-toggle{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid #2a2d36}
+.wfs-btn{flex:1;padding:7px 4px;border-radius:6px;border:1px solid #2a2d36;background:#0a0a0a;color:#6b7280;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;text-align:center;transition:all .2s}
+.wfs-btn.sel-rent{border-color:#e8b84b;color:#e8b84b;background:rgba(232,184,75,.1)}
+.wfs-btn.sel-hand{border-color:#4be8a0;color:#4be8a0;background:rgba(75,232,160,.1)}
+
+/* PRINT */
 #sheet{display:none}
 @media print{
   #sheet{display:block}
@@ -76,53 +76,38 @@ textarea:focus{border-color:#e8b84b}
   .ph-m{padding:6pt 16pt;font-size:11pt;font-weight:bold;text-align:center;display:flex;align-items:center;white-space:nowrap}
   .ph-r{flex:1;padding:6pt 10pt}
 
-  /* Colonnes: Reg | Flight | ARR-badge | Pick up | Time | Stand | Note */
   table.pt{width:100%;border-collapse:collapse}
   table.pt th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
-  table.pt td{border:1pt solid black;padding:5pt 6pt;vertical-align:middle}
+  table.pt td{border:1pt solid black;padding:4pt 5pt;vertical-align:middle}
 
   .col-reg{width:13%}
   .col-flt{width:13%}
-  .col-arr{width:7%;text-align:center;padding:3pt;font-size:8pt;font-weight:bold}
-  .col-pup{width:10%;font-size:9pt;font-style:italic}
-  .col-time{width:11%}
-  .col-stand{width:8%;text-align:center}
+  .col-arr{width:7%;text-align:center;font-size:8pt;font-weight:bold}
+  .col-pup{width:10%;font-style:italic;font-size:9pt}
+  .col-time{width:10%}
+  .col-stand{width:7%;text-align:center}
   .col-note{width:26%}
-
-  /* ARR badge arrivées : entouré + surligné vert clair */
-  .badge-arr{
-    display:inline-block;
-    border:1.5pt solid #2d7a2d;
-    border-radius:3pt;
-    padding:1pt 4pt;
-    font-size:7pt;font-weight:bold;
-    background:#d4edda;
-    color:#1a5c1a;
-  }
-
-  /* Pick up départs : entouré + surligné rouge */
-  .badge-pup{
-    display:inline-block;
-    border:1.5pt solid #c0392b;
-    border-radius:3pt;
-    padding:1pt 5pt;
-    font-size:8pt;font-style:italic;
-    background:#fde8e8;
-    color:#7b1010;
-    white-space:nowrap;
-  }
-
   .font-lg{font-size:12pt}
 
+  .badge-arr{display:inline-block;border:1.5pt solid #2d7a2d;border-radius:3pt;padding:1pt 4pt;font-size:7pt;font-weight:bold;background:#d4edda;color:#1a5c1a}
+  .badge-pup{display:inline-block;border:1.5pt solid #c0392b;border-radius:3pt;padding:1pt 5pt;font-size:8pt;font-style:italic;background:#fde8e8;color:#7b1010;white-space:nowrap}
+
   .psep td{background:#f0f0f0;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt;border:1pt solid black}
-  .per td{height:22pt;border:1pt solid black}
+  .per td{border:1pt solid black}
 
   /* Tableau bas */
-  table.pb{width:100%;border-collapse:collapse;margin-top:10pt}
-  table.pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:3pt;font-variant:small-caps}
-  table.pb td{border:1pt solid black;padding:4pt;height:20pt;vertical-align:middle}
+  table.pb{width:100%;border-collapse:collapse;margin-top:8pt}
+  table.pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
+  table.pb td{border:1pt solid black;padding:5pt 4pt;vertical-align:middle}
   .pdv{background:black!important;width:4pt;padding:0;border:none}
-  .psh{font-weight:bold;font-size:9pt;text-align:center;padding:4pt;border:1pt solid black}
+  .psh{font-weight:bold;font-size:9pt;text-align:center;padding:5pt;border:1pt solid black}
+  /* Cellule DEP//ARR divisée verticalement */
+  .split-cell{padding:0!important}
+  .split-top{border-bottom:0.5pt solid black;padding:3pt 4pt;display:block;font-size:8pt}
+  .split-bot{padding:3pt 4pt;display:block;font-size:8pt}
+  .single-cell{padding:5pt 4pt;font-size:8pt;vertical-align:middle}
+  /* Hauteur rangées tableau bas */
+  table.pb tr{height:22pt}
 }
 </style>
 </head>
@@ -190,13 +175,6 @@ textarea:focus{border-color:#e8b84b}
     </div>
     <div id="prev"></div>
   </div>
-  <div class="card">
-    <div class="lbl" style="margin-bottom:10px">OPTIONS</div>
-    <div class="tog-row">
-      <div><div class="tl">Lignes vides à la fin</div><div class="ts">5 lignes ARR / Pick up vides</div></div>
-      <button class="tog on" id="togE" onclick="opts.empty=!opts.empty;this.classList.toggle('on',opts.empty)"></button>
-    </div>
-  </div>
   <button class="btn bg" onclick="genPDF()" style="margin-bottom:8px">🖨 GÉNÉRER LA FEUILLE PDF</button>
   <div class="brow">
     <button class="btn bs" onclick="go(1)">← RETOUR</button>
@@ -204,7 +182,7 @@ textarea:focus{border-color:#e8b84b}
   </div>
 </div>
 
-<!-- ══ FEUILLE IMPRIMABLE ══════════════════════════════════════════ -->
+<!-- FEUILLE PRINT -->
 <div id="sheet">
   <div class="ph">
     <div class="ph-l" id="sh-date"></div>
@@ -212,50 +190,44 @@ textarea:focus{border-color:#e8b84b}
     <div class="ph-r"></div>
   </div>
   <table class="pt">
-    <thead>
-      <tr>
-        <th class="col-reg">Registration</th>
-        <th class="col-flt">Flight Number</th>
-        <th class="col-arr">ARR</th>
-        <th class="col-pup">Pick up</th>
-        <th class="col-time">Time (Local)</th>
-        <th class="col-stand">Stand</th>
-        <th class="col-note">Note</th>
-      </tr>
-    </thead>
+    <thead><tr>
+      <th class="col-reg">Registration</th>
+      <th class="col-flt">Flight Number</th>
+      <th class="col-arr">ARR</th>
+      <th class="col-pup">Pick up</th>
+      <th class="col-time">Time (Local)</th>
+      <th class="col-stand">Stand</th>
+      <th class="col-note">Note</th>
+    </tr></thead>
     <tbody id="sh-rows"></tbody>
   </table>
   <br>
-  <table class="pb">
+  <table class="pb" id="sh-bottom">
     <tr>
       <td colspan="3" class="psh">Headset</td>
       <td class="pdv"></td>
       <td colspan="4" class="psh">Handling</td>
     </tr>
     <tr>
-      <th style="width:16%">Registration</th>
-      <th style="width:14%">FLT #</th>
-      <th style="width:14%">Depart</th>
-      <td class="pdv"></td>
       <th style="width:14%">Registration</th>
       <th style="width:12%">FLT #</th>
-      <th style="width:13%">DEP // ARR</th>
-      <th>Handling WFS</th>
+      <th style="width:13%">Depart</th>
+      <td class="pdv"></td>
+      <th style="width:13%">Registration</th>
+      <th style="width:11%">FLT #</th>
+      <th style="width:18%">DEP // ARR</th>
+      <th style="width:19%">Handling WFS</th>
     </tr>
-    <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td></td><td></td><td class="pdv"></td><td></td><td></td><td></td><td></td></tr>
+    <tbody id="sh-bottom-rows"></tbody>
   </table>
 </div>
 
 <script>
-const S = { shift:'NIGHT', arr:[], dep:[] };
-const opts = { empty:true };
-const HL = ['WFS','CHALLENGE','SWISSPORT','BAS','FEDEX','AVIAPARTNER'];
-const AC = /^(B7[0-9]{2}[LW]?|A3[0-9]{2}|B738|B763|B744|B748|A306|A332|A333|B734|B752|A321|B77[LW]|AT7[0-9]|CRJ|E[0-9]{3}|C25[ABC]|DA4[0-9]|PC1[0-9]|GLF4?|FA7X|LJ45|C510|C680)$/i;
+const S={shift:'NIGHT',arr:[],dep:[]};
+const HL=['WFS','CHALLENGE','SWISSPORT','BAS','FEDEX','AVIAPARTNER'];
+const AC=/^(B7[0-9]{2}[LW]?|A3[0-9]{2}|B738|B763|B744|B748|A306|A332|A333|B734|B752|A321|B77[LW]|AT7[0-9]|CRJ|E[0-9]{3}|C25[ABC]|DA4[0-9]|PC1[0-9]|GLF4?|FA7X|LJ45|C510|C680)$/i;
 
-document.getElementById('sDate').value = new Date().toISOString().slice(0,10);
+document.getElementById('sDate').value=new Date().toISOString().slice(0,10);
 
 function go(n){
   document.querySelectorAll('.sec').forEach((s,i)=>s.classList.toggle('show',i===n));
@@ -265,41 +237,27 @@ function go(n){
 function selShift(s,el){S.shift=s;document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
 function reset(){S.arr=[];S.dep=[];document.getElementById('tFids').value='';go(0);}
 
-// ── Handler : inclure seulement CHALLENGE, WFS, SWISSPORT+TAY ────
-function shouldInclude(flight, raw){
-  if(!raw) return false;
+function shouldInclude(flight,raw){
+  if(!raw)return false;
   const r=raw.toUpperCase().trim();
-  if(r==='CHALLENGE'||r==='WFS') return true;
-  if(r==='SWISSPORT'&&flight.toUpperCase().startsWith('TAY')) return true;
+  if(r==='CHALLENGE'||r==='WFS')return true;
+  if(r==='SWISSPORT'&&flight.toUpperCase().startsWith('TAY'))return true;
   return false;
 }
-
-// ── Pickup time ETD - 1h15 ────────────────────────────────────────
 function pickup(t){
   const[h,m]=t.split(':').map(Number);
   let x=h*60+m-75;if(x<0)x+=1440;
   return String(Math.floor(x/60)%24).padStart(2,'0')+':'+String(x%60).padStart(2,'0');
 }
-
-// ── Fenêtre shift (basée sur ETA pour ARR, ETD pour DEP) ─────────
 function inWinArr(t){
-  // Pour les arrivées : ETA dans la fenêtre
   if(!t||!/^\d{1,2}:\d{2}$/.test(t))return false;
   const[h,m]=t.split(':').map(Number),mins=h*60+m;
   if(S.shift==='NIGHT')return mins>=22*60||mins<6*60;
   if(S.shift==='EARLY')return mins>=6*60&&mins<14*60;
   return mins>=14*60&&mins<22*60;
 }
-function inWinDep(t){
-  // Pour les départs : pickup time (ETD-1h15) dans la fenêtre
-  const pk=pickup(t);
-  return inWinArr(pk);
-}
-
-// ── OACI airport code ─────────────────────────────────────────────
-function isOACI(s){return /^[EBLFKOGZDRUYCNHPWVTSBCP][A-Z]{3}$/.test(s)&&!/\d/.test(s);}
-
-// ── Aircraft registration ─────────────────────────────────────────
+function inWinDep(t){return inWinArr(pickup(t));}
+function isOACI(s){return/^[EBLFKOGZDRUYCNHPWVTSBCP][A-Z]{3}$/.test(s)&&!/\d/.test(s);}
 function isReg(s){
   if(!s||s.length<4||s.length>8)return false;
   if(!/^[A-Z0-9]+$/.test(s)||/^\d+$/.test(s))return false;
@@ -307,62 +265,36 @@ function isReg(s){
   if(/^\d+[A-Z]?$/.test(s)&&s.length<=4)return false;
   return/\d/.test(s)||/^(OE|TF|OO|9H|EI|N[0-9]|G|F|D|PH|SE|OH|LN|SP|HA|YR|LZ|CS|EC|TC|SU|ET|5Y|VT|B|JA|HL|A6|A7|EK|UK|UR|4X)/i.test(s);
 }
+function isStand(s){return/^\d{1,3}[A-Z]?$/.test(s)&&parseInt(s)<200;}
 
-// ── Is stand number ───────────────────────────────────────────────
-function isStand(s){return /^\d{1,3}[A-Z]?$/.test(s)&&parseInt(s)<200;}
-
-// ── Parse FIDS ────────────────────────────────────────────────────
 function parseFids(text){
   const arrivals=[],departures=[],seen=new Set();
   const lines=text.split('\n').map(l=>l.trim()).filter(l=>l.length>5);
-
   for(const line of lines){
     const upper=line.toUpperCase();
-    // Ignorer les lignes UI
     if(/^(date|flight|a\/c|direction|handler|filter|utc|lt$|night mode|day mode|version|all time|reset|clear|cancel|took off|soon|later|landed|runway|stand|via$|arrivals$|departures$|pyxis|system)/i.test(line))continue;
     if(line.length<10)continue;
-
     const tokens=line.split(/\s+/);
     if(tokens.length<4)continue;
-
-    // Toutes les heures HH:MM de la ligne
     const times=tokens.filter(t=>/^\d{1,2}:\d{2}$/.test(t));
     if(!times.length)continue;
-    // ETD/ETA = dernière heure
     const eta=times[times.length-1];
-
-    // Type ARR ou DEP
     let type=null;
     if(upper.startsWith('DEPARTURES')||upper.startsWith('DEPARTURE'))type='dep';
     else if(upper.startsWith('ARRIVALS')||upper.startsWith('ARRIVAL'))type='arr';
     else if(upper.includes('DEPARTURES'))type='dep';
     else if(upper.includes('ARRIVALS'))type='arr';
-    else{
-      const idx=tokens.indexOf('EBLG');
-      type=(idx!==-1&&idx<tokens.length/2)?'dep':'arr';
-    }
-
-    // Vérifier fenêtre selon type
+    else{const idx=tokens.indexOf('EBLG');type=(idx!==-1&&idx<tokens.length/2)?'dep':'arr';}
     if(type==='arr'&&!inWinArr(eta))continue;
     if(type==='dep'&&!inWinDep(eta))continue;
-
-    // Handler
     let hw='';
     for(const h of HL){if(upper.includes(h)){hw=h;break;}}
-
-    // Flight number
     let flight='';
-    for(const t of tokens){
-      if(/^[A-Z]{1,3}\d{3,5}[A-Z]?$/.test(t)&&!/^\d+$/.test(t)){flight=t;break;}
-    }
+    for(const t of tokens){if(/^[A-Z]{1,3}\d{3,5}[A-Z]?$/.test(t)&&!/^\d+$/.test(t)){flight=t;break;}}
     if(!flight)continue;
-
-    // Vérifier handler
     if(!shouldInclude(flight,hw))continue;
     if(seen.has(flight))continue;
     seen.add(flight);
-
-    // Registration
     let reg='';
     for(const t of tokens){
       if(t===flight||/^\d{1,2}:\d{2}$/.test(t)||/^\d{2}\//.test(t))continue;
@@ -370,22 +302,17 @@ function parseFids(text){
       if(isStand(t))continue;
       if(isReg(t)){reg=t;break;}
     }
-
-    // Stand (numéro entre 1 et 199, éventuellement suivi d'une lettre)
     let stand='';
-    for(const t of tokens){
-      if(isStand(t)&&t!==reg){stand=t;break;}
-    }
-
-    const obj={flight,reg,eta,time:type==='dep'?pickup(eta):eta,handler:hw,stand,type};
+    for(const t of tokens){if(isStand(t)&&t!==reg){stand=t;break;}}
+    // wfsMode: null (non-WFS), 'renting', 'handling' — défaut 'handling' pour WFS
+    const wfsMode=hw.toUpperCase()==='WFS'?'handling':null;
+    const obj={flight,reg,eta,time:type==='dep'?pickup(eta):eta,handler:hw,stand,type,wfsMode};
     if(type==='dep')departures.push(obj);
     else arrivals.push(obj);
   }
-
   return{arrivals,departures};
 }
 
-// ── Analyser ──────────────────────────────────────────────────────
 function doAnalyse(){
   const t=document.getElementById('tFids').value;
   if(!t.trim()){alert('Colle le texte du FIDS d\'abord.');return;}
@@ -393,14 +320,19 @@ function doAnalyse(){
   S.arr=arrivals;S.dep=departures;
   const total=arrivals.length+departures.length;
   if(!total){
-    document.getElementById('iInfo').innerHTML=`<span class="err">⚠ Aucun vol détecté (shift ${S.shift}). Vérifie le texte collé.</span>`;
+    document.getElementById('iInfo').innerHTML=`<span class="err">⚠ Aucun vol détecté (shift ${S.shift}).</span>`;
     return;
   }
   document.getElementById('iInfo').innerHTML=`<span class="ok">✓ ${arrivals.length} arrivée(s) + ${departures.length} départ(s)</span>`;
   renderPreview();go(2);
 }
 
-// ── Preview ───────────────────────────────────────────────────────
+function setWfs(flight,mode){
+  // Chercher dans arr et dep
+  [...S.arr,...S.dep].forEach(f=>{if(f.flight===flight)f.wfsMode=mode;});
+  renderPreview();
+}
+
 function renderPreview(){
   document.getElementById('cA').textContent=S.arr.length;
   document.getElementById('cD').textContent=S.dep.length;
@@ -408,26 +340,40 @@ function renderPreview(){
   if(S.arr.length){
     h+=`<div class="grp a">✈ ARRIVÉES (${S.arr.length})</div>`;
     S.arr.forEach(f=>{
+      const isWfs=f.handler.toUpperCase()==='WFS';
       h+=`<div class="fi a">
-        <div class="fi-t">${f.time}</div>
-        <div class="fi-b">
-          <div class="fi-f">${f.flight}</div>
-          <div class="fi-r">${f.reg||'—'} · ${f.handler}${f.stand?' · Stand '+f.stand:''}</div>
+        <div class="fi-top">
+          <div class="fi-t">${f.time}</div>
+          <div class="fi-b">
+            <div class="fi-f">${f.flight}</div>
+            <div class="fi-r">${f.reg||'—'} · ${f.handler}${f.stand?' · Stand '+f.stand:''}</div>
+          </div>
+          <div class="fi-bx a">ARR</div>
         </div>
-        <div class="fi-bx a">ARR</div>
+        ${isWfs?`<div class="wfs-toggle">
+          <button class="wfs-btn ${f.wfsMode==='renting'?'sel-rent':''}" onclick="setWfs('${f.flight}','renting')">🔑 Renting</button>
+          <button class="wfs-btn ${f.wfsMode==='handling'?'sel-hand':''}" onclick="setWfs('${f.flight}','handling')">🔧 Handling</button>
+        </div>`:''}
       </div>`;
     });
   }
   if(S.dep.length){
     h+=`<div class="grp d">✈ DÉPARTS — pick up = ETD-1h15 (${S.dep.length})</div>`;
     S.dep.forEach(f=>{
+      const isWfs=f.handler.toUpperCase()==='WFS';
       h+=`<div class="fi d">
-        <div class="fi-t">${f.time}<div class="fi-etd">ETD ${f.eta}</div></div>
-        <div class="fi-b">
-          <div class="fi-f">${f.flight}</div>
-          <div class="fi-r">${f.reg||'—'} · ${f.handler}${f.stand?' · Stand '+f.stand:''}</div>
+        <div class="fi-top">
+          <div class="fi-t">${f.time}<div class="fi-etd">ETD ${f.eta}</div></div>
+          <div class="fi-b">
+            <div class="fi-f">${f.flight}</div>
+            <div class="fi-r">${f.reg||'—'} · ${f.handler}${f.stand?' · Stand '+f.stand:''}</div>
+          </div>
+          <div class="fi-bx d">DEP</div>
         </div>
-        <div class="fi-bx d">DEP</div>
+        ${isWfs?`<div class="wfs-toggle">
+          <button class="wfs-btn ${f.wfsMode==='renting'?'sel-rent':''}" onclick="setWfs('${f.flight}','renting')">🔑 Renting</button>
+          <button class="wfs-btn ${f.wfsMode==='handling'?'sel-hand':''}" onclick="setWfs('${f.flight}','handling')">🔧 Handling</button>
+        </div>`:''}
       </div>`;
     });
   }
@@ -435,17 +381,14 @@ function renderPreview(){
   document.getElementById('prev').innerHTML=h;
 }
 
-// ── Générer PDF ───────────────────────────────────────────────────
 function genPDF(){
   const dateVal=document.getElementById('sDate').value;
   const dl=dateVal?dateVal.split('-').reverse().join('/'):'—';
-
   document.getElementById('sh-date').textContent='Crew bus service   '+dl;
   document.getElementById('sh-shift').innerHTML='EARLY // LATE // <u><b>'+S.shift+'</b></u>';
 
+  // ── Tableau principal ─────────────────────────────────────────
   let rows='';
-
-  // ARRIVÉES : ARR entouré vert + Pick up normal
   S.arr.forEach(f=>{
     rows+=`<tr>
       <td class="col-reg font-lg">${f.reg||''}</td>
@@ -457,10 +400,7 @@ function genPDF(){
       <td class="col-note"></td>
     </tr>`;
   });
-
   if(S.arr.length&&S.dep.length)rows+=`<tr class="psep"><td colspan="7">— DÉPARTS —</td></tr>`;
-
-  // DÉPARTS : ARR sans entourage + Pick up entouré rouge
   S.dep.forEach(f=>{
     rows+=`<tr>
       <td class="col-reg font-lg">${f.reg||''}</td>
@@ -473,33 +413,84 @@ function genPDF(){
     </tr>`;
   });
 
-  // Lignes vides dynamiques — remplir jusqu'au bas de la feuille
-  // A4 = 297mm, marges 10mm x2 = 277mm utilisables
-  // En-tête ~14mm, tableau bas ~38mm, en-tête tableau ~8mm = ~60mm réservés
-  // Chaque ligne de données ~8mm
-  // Lignes déjà présentes = arr + dep + (séparateur si les deux)
-  const sep = (S.arr.length && S.dep.length) ? 1 : 0;
-  const dataRows = S.arr.length + S.dep.length + sep;
-  const pageHeightMm = 277; // A4 - marges
-  const headerMm = 14;
-  const bottomTableMm = 42;
-  const tableHeaderMm = 8;
-  const rowHeightMm = 8.5;
-  const availableForRows = pageHeightMm - headerMm - bottomTableMm - tableHeaderMm;
-  const totalRowsFit = Math.floor(availableForRows / rowHeightMm);
-  const emptyCount = Math.max(3, totalRowsFit - dataRows);
-
+  // Lignes vides — calcul dynamique
+  // A4 277mm utiles. En-tête ~12mm, header tableau ~7mm, tableau bas ~55mm, séparateur ~4mm = ~78mm réservés
+  // Disponible pour les lignes = 277 - 78 = 199mm
+  // Hauteur par ligne ~7.5mm
+  const sep=(S.arr.length&&S.dep.length)?1:0;
+  const dataRows=S.arr.length+S.dep.length+sep;
+  const totalFit=Math.floor(199/7.5);
+  const emptyCount=Math.max(2,totalFit-dataRows);
   for(let i=0;i<emptyCount;i++){
-    rows+=`<tr class="per">
-      <td></td>
-      <td></td>
-      <td class="col-arr">ARR</td>
-      <td class="col-pup">Pick up</td>
-      <td></td><td></td><td></td>
+    rows+=`<tr class="per" style="height:7.5mm"><td></td><td></td><td class="col-arr">ARR</td><td class="col-pup">Pick up</td><td></td><td></td><td></td></tr>`;
+  }
+  document.getElementById('sh-rows').innerHTML=rows;
+
+  // ── Tableau bas : Headset + Handling ─────────────────────────
+  // Renting = vols WFS avec mode 'renting'
+  // Handling = vols WFS avec mode 'handling'
+  const rentingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='renting');
+  const handlingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='handling');
+
+  // Grouper les handling par registration pour combiner ARR+DEP
+  const handlingMap={};
+  handlingFlights.forEach(f=>{
+    const key=f.reg||f.flight;
+    if(!handlingMap[key])handlingMap[key]={reg:f.reg,flights:[]};
+    handlingMap[key].flights.push(f);
+  });
+  const handlingGroups=Object.values(handlingMap);
+
+  // Construire les lignes du tableau bas
+  // Max 4 lignes data (après les 2 headers)
+  const maxRows=4;
+  let bottomRows='';
+
+  // On remplit ligne par ligne : renting en col Renting (Handling WFS), handling en cols Handling
+  const rentLines=rentingFlights.map(f=>({
+    reg:f.reg||'',flt:f.flight,depart:'',
+    hReg:'',hFlt:'',hDepArr:'',hWfs:f.reg||f.flight
+  }));
+  const handLines=handlingGroups.map(g=>{
+    const arr=g.flights.filter(f=>f.type==='arr');
+    const dep=g.flights.filter(f=>f.type==='dep');
+    let depArr='';
+    if(arr.length&&dep.length){
+      // Divisée en deux
+      depArr='SPLIT:A)'+arr[0].eta+'|D)'+dep[0].eta;
+    } else if(arr.length){
+      depArr='A) '+arr[0].eta;
+    } else if(dep.length){
+      depArr='D) '+dep[0].eta;
+    }
+    const rep=g.flights[0];
+    return{reg:'',flt:'',depart:'',hReg:rep.reg||'',hFlt:g.flights.map(f=>f.flight).join(' / '),hDepArr:depArr,hWfs:''};
+  });
+
+  // Fusionner : une ligne = une entrée renting OU handling
+  const allLines=[...rentLines,...handLines];
+  for(let i=0;i<maxRows;i++){
+    const l=allLines[i]||{reg:'',flt:'',depart:'',hReg:'',hFlt:'',hDepArr:'',hWfs:''};
+    let depArrCell='';
+    if(l.hDepArr&&l.hDepArr.startsWith('SPLIT:')){
+      const parts=l.hDepArr.replace('SPLIT:','').split('|');
+      depArrCell=`<td class="split-cell"><span class="split-top">${parts[0]||''}</span><span class="split-bot">${parts[1]||''}</span></td>`;
+    } else {
+      depArrCell=`<td class="single-cell">${l.hDepArr||''}</td>`;
+    }
+    bottomRows+=`<tr>
+      <td>${l.reg||''}</td>
+      <td>${l.flt||''}</td>
+      <td>${l.depart||''}</td>
+      <td class="pdv"></td>
+      <td>${l.hReg||''}</td>
+      <td>${l.hFlt||''}</td>
+      ${depArrCell}
+      <td>${l.hWfs||''}</td>
     </tr>`;
   }
+  document.getElementById('sh-bottom-rows').innerHTML=bottomRows;
 
-  document.getElementById('sh-rows').innerHTML=rows;
   window.print();
 }
 </script>
