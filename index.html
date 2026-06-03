@@ -100,7 +100,7 @@ textarea:focus{border-color:#e8b84b}
   .ph-r{flex:1;padding:6pt 10pt}
   table.pt{width:100%;border-collapse:collapse}
   table.pt th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
-  table.pt td{border:1pt solid black;padding:4pt 5pt;vertical-align:middle;height:9.5mm}
+  table.pt td{border:1pt solid black;padding:3pt 5pt;vertical-align:middle;height:8mm}
   .col-reg{width:13%}.col-flt{width:13%}
   .col-arr{width:7%;text-align:center;font-size:8pt;font-weight:bold}
   .col-pup{width:10%;font-style:italic;font-size:9pt}
@@ -109,14 +109,14 @@ textarea:focus{border-color:#e8b84b}
   .badge-arr{display:inline-block;border:1.5pt solid #2d7a2d;border-radius:3pt;padding:1pt 4pt;font-size:7pt;font-weight:bold;background:#d4edda;color:#1a5c1a}
   .badge-pup{display:inline-block;border:1.5pt solid #c0392b;border-radius:3pt;padding:1pt 5pt;font-size:8pt;font-style:italic;background:#fde8e8;color:#7b1010;white-space:nowrap}
   .psep td{background:#f0f0f0;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt;border:1pt solid black}
-  .per{height:9.5mm}.per td{border:1pt solid black}
+  .per{height:8mm}.per td{border:1pt solid black}
   table.pb{width:100%;border-collapse:collapse;margin-top:8pt}
   table.pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
   table.pb td{border:1pt solid black;padding:4pt;vertical-align:middle;text-align:center;font-size:9pt}
   .pdv{background:black!important;width:2pt;padding:0;border:none;max-width:2pt}
   .psh{font-weight:bold;font-size:9pt;text-align:center;padding:5pt;border:1pt solid black}
   .crossed{background:repeating-linear-gradient(45deg,#ddd,#ddd 1pt,white 1pt,white 4pt);}
-  table.pb tr{height:18pt}
+  table.pb tr{height:24pt}
 }
 </style>
 </head>
@@ -323,35 +323,68 @@ function parseFids(text){
   const lines=text.split('\n').map(l=>l.trim()).filter(l=>l.length>5);
   for(const line of lines){
     const upper=line.toUpperCase();
-    if(/^(date|flight|a\/c|direction|handler|filter|utc|lt$|night mode|day mode|version|all time|reset|clear|cancel|took off|soon|later|landed|runway|stand|via$|arrivals$|departures$|pyxis|system)/i.test(line))continue;
-    if(line.length<10)continue;
+    // Ignorer les lignes d'interface
+    if(/^(date\b|flight\b|a\/c\b|direction\b|handler\b|filter\b|utc\b|^lt$|night mode|day mode|version|all time|reset\b|clear\b|cancel\b|took off|soon\b|later\b|landed\b|runway\b|^stand$|^via$|^arrivals$|^departures$|pyxis|system op)/i.test(line))continue;
+    if(line.length<6)continue;
     const tokens=line.split(/\s+/);
-    if(tokens.length<4)continue;
+    if(tokens.length<3)continue;
+
+    // Trouver toutes les heures
     const times=tokens.filter(t=>/^\d{1,2}:\d{2}$/.test(t));
     if(!times.length)continue;
-    const eta=times[times.length-1];
+    const eta=times[times.length-1]; // dernière heure = ETA/ETD estimée
+
+    // Détecter ARR ou DEP — priorité au mot en début de ligne
     let type=null;
-    if(upper.startsWith('DEPARTURES')||upper.startsWith('DEPARTURE'))type='dep';
-    else if(upper.startsWith('ARRIVALS')||upper.startsWith('ARRIVAL'))type='arr';
-    else if(upper.includes('DEPARTURES'))type='dep';
-    else if(upper.includes('ARRIVALS'))type='arr';
-    else{const idx=tokens.indexOf('EBLG');type=(idx!==-1&&idx<tokens.length/2)?'dep':'arr';}
+    if(/^departures?\b/i.test(line)) type='dep';
+    else if(/^arrivals?\b/i.test(line)) type='arr';
+    else if(/\bdepartures?\b/i.test(line)) type='dep';
+    else if(/\barrivals?\b/i.test(line)) type='arr';
+    else {
+      // Déduire depuis EBLG : si EBLG est dans la 1ère moitié = départ
+      const eblgIdx=tokens.findIndex(t=>t==='EBLG'||t==='ELLX');
+      if(eblgIdx!==-1) type=eblgIdx<tokens.length/2?'dep':'arr';
+      else type='arr'; // défaut
+    }
+
+    // Vérifier fenêtre horaire
     if(type==='arr'&&!inWinArr(eta))continue;
     if(type==='dep'&&!inWinDep(eta))continue;
-    let hw='';for(const h of HL){if(upper.includes(h)){hw=h;break;}}
-    let flight='';for(const t of tokens){if(/^[A-Z]{1,3}\d{3,5}[A-Z]?$/.test(t)&&!/^\d+$/.test(t)){flight=t;break;}}
+
+    // Handler
+    let hw='';
+    for(const h of HL){if(upper.includes(h)){hw=h;break;}}
+
+    // Numéro de vol : 2-3 lettres + 3-5 chiffres
+    let flight='';
+    for(const t of tokens){
+      if(/^[A-Z]{1,3}\d{3,5}[A-Z]?$/.test(t)&&!/^\d+$/.test(t)){flight=t;break;}
+    }
     if(!flight)continue;
-    if(seen.has(flight))continue;
-    seen.add(flight);
+
+    // Clé unique = vol + type (même vol peut avoir ARR et DEP)
+    const key=flight+'_'+type;
+    if(seen.has(key))continue;
+    seen.add(key);
+
+    // Registration
     let reg='';
-    for(const t of tokens){if(t===flight||/^\d{1,2}:\d{2}$/.test(t)||/^\d{2}\//.test(t))continue;if(HL.includes(t.toUpperCase())||t==='EBLG')continue;if(isStand(t))continue;if(isReg(t)){reg=t;break;}}
-    let stand='';for(const t of tokens){if(isStand(t)&&t!==reg){stand=t;break;}}
+    for(const t of tokens){
+      if(t===flight||/^\d{1,2}:\d{2}$/.test(t)||/^\d{2}\//.test(t))continue;
+      if(HL.includes(t.toUpperCase())||t==='EBLG'||t==='ELLX')continue;
+      if(isStand(t))continue;
+      if(isReg(t)){reg=t;break;}
+    }
+
+    // Stand
+    let stand='';
+    for(const t of tokens){if(isStand(t)&&t!==reg){stand=t;break;}}
+
     if(shouldInclude(flight,hw)){
       const wfsMode=hw.toUpperCase()==='WFS'?'handling':null;
       const obj={flight,reg,eta,time:type==='dep'?pickup(eta):eta,handler:hw,stand,type,wfsMode};
       if(type==='dep')departures.push(obj);else arrivals.push(obj);
     } else if(canPropose(hw)){
-      // Vol exclu mais proposable
       excluded.push({flight,reg,eta,time:type==='dep'?pickup(eta):eta,handler:hw,stand,type});
     }
   }
@@ -530,7 +563,8 @@ function genPDF(){
   S.dep.forEach(f=>{rows+=`<tr><td class="col-reg font-lg">${f.reg||''}</td><td class="col-flt font-lg">${f.flight}</td><td class="col-arr">ARR</td><td class="col-pup"><span class="badge-pup">Pick up</span></td><td class="col-time font-lg">${f.time}</td><td class="col-stand">${f.stand||''}</td><td class="col-note"></td></tr>`;});
   const sep=(S.arr.length&&S.dep.length)?1:0;
   const dataRows=S.arr.length+S.dep.length+sep;
-  const totalFit=Math.floor(737/36);
+  // 8mm par ligne, ~195mm disponibles = ~24 lignes max
+  const totalFit=Math.floor(195/8);
   const emptyCount=Math.max(0,totalFit-dataRows);
   for(let i=0;i<emptyCount;i++){rows+=`<tr class="per"><td></td><td></td><td class="col-arr">ARR</td><td class="col-pup">Pick up</td><td></td><td></td><td></td></tr>`;}
   document.getElementById('sh-rows').innerHTML=rows;
