@@ -113,7 +113,7 @@ textarea:focus{border-color:#e8b84b}
   table.pb{width:100%;border-collapse:collapse;margin-top:8pt}
   table.pb th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
   table.pb td{border:1pt solid black;padding:4pt;vertical-align:middle;text-align:center;font-size:9pt}
-  .pdv{background:black!important;width:2pt;padding:0;border:none;max-width:2pt}
+  .pdv{background:black!important;width:1pt;padding:0;border:none;max-width:1pt}
   .psh{font-weight:bold;font-size:9pt;text-align:center;padding:5pt;border:1pt solid black}
   .crossed{background:repeating-linear-gradient(45deg,#ddd,#ddd 1pt,white 1pt,white 4pt);}
   table.pb tr{height:24pt}
@@ -559,12 +559,11 @@ function genPDF(){
   document.getElementById('sh-shift').innerHTML='EARLY // LATE // <u><b>'+S.shift+'</b></u>';
   let rows='';
   S.arr.forEach(f=>{rows+=`<tr><td class="col-reg font-lg">${f.reg||''}</td><td class="col-flt font-lg">${f.flight}</td><td class="col-arr"><span class="badge-arr">ARR</span></td><td class="col-pup">Pick up</td><td class="col-time font-lg">${f.time}</td><td class="col-stand">${f.stand||''}</td><td class="col-note"></td></tr>`;});
-  if(S.arr.length&&S.dep.length)rows+=`<tr class="psep"><td colspan="7">— DÉPARTS —</td></tr>`;
   S.dep.forEach(f=>{rows+=`<tr><td class="col-reg font-lg">${f.reg||''}</td><td class="col-flt font-lg">${f.flight}</td><td class="col-arr">ARR</td><td class="col-pup"><span class="badge-pup">Pick up</span></td><td class="col-time font-lg">${f.time}</td><td class="col-stand">${f.stand||''}</td><td class="col-note"></td></tr>`;});
-  const sep=(S.arr.length&&S.dep.length)?1:0;
+  const sep=0;
   const dataRows=S.arr.length+S.dep.length+sep;
-  // 8mm par ligne, ~195mm disponibles = ~24 lignes max
-  const totalFit=Math.floor(195/8);
+  // 180mm disponibles, 8mm par ligne = 22 lignes max
+  const totalFit=Math.floor(180/8);
   const emptyCount=Math.max(0,totalFit-dataRows);
   for(let i=0;i<emptyCount;i++){rows+=`<tr class="per"><td></td><td></td><td class="col-arr">ARR</td><td class="col-pup">Pick up</td><td></td><td></td><td></td></tr>`;}
   document.getElementById('sh-rows').innerHTML=rows;
