@@ -559,8 +559,8 @@ function genPDF(){
   S.dep.forEach(f=>{rows+=`<tr><td class="col-reg font-lg">${f.reg||''}</td><td class="col-flt font-lg">${f.flight}</td><td class="col-arr">ARR</td><td class="col-pup"><span class="badge-pup">Pick up</span></td><td class="col-time font-lg">${f.time}</td><td class="col-stand">${f.stand||''}</td><td class="col-note"></td></tr>`;});
   const sep=0;
   const dataRows=S.arr.length+S.dep.length+sep;
-  // 180mm disponibles, 8mm par ligne = 22 lignes max
-  const totalFit=Math.floor(180/8);
+  // 18 lignes fixes au total
+  const totalFit=18;
   const emptyCount=Math.max(0,totalFit-dataRows);
   for(let i=0;i<emptyCount;i++){rows+=`<tr class="per"><td></td><td></td><td class="col-arr">ARR</td><td class="col-pup">Pick up</td><td></td><td></td><td></td></tr>`;}
   document.getElementById('sh-rows').innerHTML=rows;
