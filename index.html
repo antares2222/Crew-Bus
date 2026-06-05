@@ -270,11 +270,11 @@ textarea:focus{border-color:#e8b84b}
     <tr>
       <th style="width:20%">Registration</th>
       <th style="width:14%">FLT #</th>
-      <th class="pb-sep-r" style="width:15%">Depart</th>
+      <th style="width:15%;border-right:4pt solid black">Depart</th>
       <th style="width:13%">Registration</th>
       <th style="width:11%">FLT #</th>
       <th style="width:9%">ARR</th>
-      <th class="pb-sep-r" style="width:9%">DEP</th>
+      <th style="width:9%;border-right:4pt solid black">DEP</th>
       <th style="width:9%"></th>
     </tr>
     <tbody id="sh-bottom-rows"></tbody>
@@ -578,7 +578,13 @@ function genPDF(){
     const hArr=h&&h.arr?h.arr.eta:'';
     const hDep=h&&h.dep?h.dep.eta:'';
     const rentReg=r?r.reg||r.flight:'';
-    bottomRows+=`<tr><td></td><td></td><td class="pb-sep-r"></td><td>${hReg}</td><td>${hFlt}</td><td${h&&!h.arr?' class="crossed pb-sep-r"':' class="pb-sep-r"'}>${hArr}</td><td${h&&!h.dep?' class="crossed"':''}>${hDep}</td><td class="pb-sep-r"></td><td>${rentReg}</td></tr>`;
+    bottomRows+=`<tr>
+      <td></td><td></td><td style="border-right:4pt solid black"></td>
+      <td>${hReg}</td><td>${hFlt}</td>
+      <td${h&&!h.arr?' style="background:repeating-linear-gradient(45deg,#ddd,#ddd 1pt,white 1pt,white 4pt)"':''}>${hArr}</td>
+      <td style="border-right:4pt solid black${h&&!h.dep?';background:repeating-linear-gradient(45deg,#ddd,#ddd 1pt,white 1pt,white 4pt)':''}">${hDep}</td>
+      <td>${rentReg}</td>
+    </tr>`;
   }
   document.getElementById('sh-bottom-rows').innerHTML=bottomRows;
   window.print();
