@@ -359,8 +359,8 @@ function parseFids(text){
     }
     if(!flight)continue;
 
-    // Clé unique = vol + type (même vol peut avoir ARR et DEP)
-    const key=flight+'_'+type;
+    // Clé unique = vol + type + heure (permet même numéro en ARR et DEP, ou deux rotations)
+    const key=flight+'_'+type+'_'+eta;
     if(seen.has(key))continue;
     seen.add(key);
 
