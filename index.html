@@ -100,11 +100,11 @@ textarea:focus{border-color:#e8b84b}
   .ph-r{flex:1;padding:6pt 10pt}
   table.pt{width:100%;border-collapse:collapse}
   table.pt th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
-  table.pt td{border:1pt solid black;padding:3pt 5pt;vertical-align:middle;height:8mm}
+  table.pt td{border:1pt solid black;padding:4pt 5pt;vertical-align:middle;height:10mm}
   .col-reg{width:13%}.col-flt{width:13%}
   .col-arr{width:7%;text-align:center;font-size:8pt;font-weight:bold}
-  .col-pup{width:10%;font-style:italic;font-size:9pt}
-  .col-time{width:10%}.col-stand{width:7%;text-align:center}.col-note{width:26%}
+  .col-pup{width:8%;text-align:center;font-weight:bold;font-size:9pt}
+  .col-time{width:10%}.col-note{width:28%}.col-stand{width:7%;text-align:center}
   .font-lg{font-size:12pt}
   .badge-arr{display:inline-block;border:1.5pt solid #2d7a2d;border-radius:3pt;padding:1pt 4pt;font-size:7pt;font-weight:bold;background:#d4edda;color:#1a5c1a}
   .badge-pup{display:inline-block;border:1.5pt solid #c0392b;border-radius:3pt;padding:1pt 5pt;font-size:8pt;font-style:italic;background:#fde8e8;color:#7b1010;white-space:nowrap}
@@ -255,8 +255,8 @@ textarea:focus{border-color:#e8b84b}
       <th class="col-arr">ARR</th>
       <th class="col-pup">Pick up</th>
       <th class="col-time">Time (Local)</th>
-      <th class="col-stand">Stand</th>
       <th class="col-note">Note</th>
+      <th class="col-stand">Stand</th>
     </tr></thead>
     <tbody id="sh-rows"></tbody>
   </table>
@@ -552,11 +552,11 @@ function renderPreview(){
 function genPDF(){
   const dateVal=document.getElementById('sDate').value;
   const dl=dateVal?dateVal.split('-').reverse().join('/'):'—';
-  document.getElementById('sh-date').textContent='Crew bus service   '+dl;
-  document.getElementById('sh-shift').innerHTML='EARLY // LATE // <u><b>'+S.shift+'</b></u>';
+  document.getElementById('sh-date').textContent='Crew bus service   '+dl+'   '+S.shift;
+  document.getElementById('sh-shift').innerHTML='';
   let rows='';
-  S.arr.forEach(f=>{rows+=`<tr><td class="col-reg font-lg">${f.reg||''}</td><td class="col-flt font-lg">${f.flight}</td><td class="col-arr"><span class="badge-arr">ARR</span></td><td class="col-pup">Pick up</td><td class="col-time font-lg">${f.time}</td><td class="col-stand">${f.stand||''}</td><td class="col-note"></td></tr>`;});
-  S.dep.forEach(f=>{rows+=`<tr><td class="col-reg font-lg">${f.reg||''}</td><td class="col-flt font-lg">${f.flight}</td><td class="col-arr">ARR</td><td class="col-pup"><span class="badge-pup">Pick up</span></td><td class="col-time font-lg">${f.time}</td><td class="col-stand">${f.stand||''}</td><td class="col-note"></td></tr>`;});
+  S.arr.forEach(f=>{rows+=`<tr><td class="col-reg font-lg">${f.reg||''}</td><td class="col-flt font-lg">${f.flight}</td><td class="col-arr"><span class="badge-arr">ARR</span></td><td class="col-pup">Pick up</td><td class="col-time font-lg">${f.time}</td><td class="col-note"></td><td class="col-stand">${f.stand||''}</td></tr>`;});
+  S.dep.forEach(f=>{rows+=`<tr><td class="col-reg font-lg">${f.reg||''}</td><td class="col-flt font-lg">${f.flight}</td><td class="col-arr">ARR</td><td class="col-pup"><span class="badge-pup">Pick up</span></td><td class="col-time font-lg">${f.time}</td><td class="col-note"></td><td class="col-stand">${f.stand||''}</td></tr>`;});
   const sep=0;
   const dataRows=S.arr.length+S.dep.length+sep;
   // 19 lignes fixes au total
