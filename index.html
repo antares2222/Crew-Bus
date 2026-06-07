@@ -104,7 +104,7 @@ textarea:focus{border-color:#e8b84b}
   .col-reg{width:13%}.col-flt{width:13%}
   .col-arr{width:7%;text-align:center;font-size:8pt;font-weight:bold}
   .col-pup{width:8%;text-align:center;font-weight:bold;font-size:9pt}
-  .col-time{width:10%;font-size:14pt;letter-spacing:1pt;text-align:center}.col-note{width:28%}.col-stand{width:7%;text-align:center}
+  .col-time{width:10%;font-size:16pt;letter-spacing:1pt;text-align:center}.col-note{width:28%}.col-stand{width:7%;text-align:center}
   .font-lg{font-size:12pt}
   .badge-arr{display:inline-block;border:1.5pt solid #2d7a2d;border-radius:3pt;padding:1pt 4pt;font-size:7pt;font-weight:bold;background:#d4edda;color:#1a5c1a}
   .badge-pup{display:inline-block;border:1.5pt solid #c0392b;border-radius:3pt;padding:1pt 5pt;font-size:8pt;font-style:italic;background:#fde8e8;color:#7b1010;white-space:nowrap}
@@ -254,7 +254,7 @@ textarea:focus{border-color:#e8b84b}
       <th class="col-flt">Flight Number</th>
       <th class="col-arr">ARR</th>
       <th class="col-pup">Pick up</th>
-      <th class="col-time">Time (Local)</th>
+      <th class="col-time">Time</th>
       <th class="col-note">Note</th>
       <th class="col-stand">Stand</th>
     </tr></thead>
@@ -565,6 +565,14 @@ function genPDF(){
   for(let i=0;i<emptyCount;i++){rows+=`<tr class="per"><td></td><td></td><td class="col-arr">ARR</td><td class="col-pup">Pick up</td><td></td><td></td><td></td></tr>`;}
   document.getElementById('sh-rows').innerHTML=rows;
   const rentingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='renting');
+  // Dédupliquer renting par registration (ou vol si pas de registration)
+  const rentingSeen=new Set();
+  const rentingDedup=rentingFlights.filter(f=>{
+    const key=f.reg||f.flight;
+    if(rentingSeen.has(key))return false;
+    rentingSeen.add(key);
+    return true;
+  });
   const handlingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='handling');
   const handlingMap={};
   handlingFlights.forEach(f=>{const key=f.reg||f.flight;if(!handlingMap[key])handlingMap[key]={reg:f.reg,arr:null,dep:null,flights:[]};handlingMap[key].flights.push(f);if(f.type==='arr')handlingMap[key].arr=f;else handlingMap[key].dep=f;});
@@ -572,7 +580,7 @@ function genPDF(){
   let bottomRows='';
   for(let i=0;i<4;i++){
     const h=handlingGroups[i]||null;
-    const r=rentingFlights[i]||null;
+    const r=rentingDedup[i]||null;
     const hReg=h?h.flights[0].reg||'':'';
     const hFlt=h?(h.arr?h.arr.flight:(h.dep?h.dep.flight:'')):'';
     const hArr=h&&h.arr?h.arr.eta:'';
