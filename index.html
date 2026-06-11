@@ -117,7 +117,7 @@ textarea:focus{border-color:#e8b84b}
   .pb-sep-r{border-right:4pt solid black !important}
   .psh{font-weight:bold;font-size:9pt;text-align:center;padding:5pt;border:1pt solid black}
   .crossed{background:repeating-linear-gradient(45deg,#ddd,#ddd 1pt,white 1pt,white 4pt);}
-  table.pb tr{height:24pt}
+  table.pb tr{height:30pt}
 }
 </style>
 </head>
@@ -438,7 +438,12 @@ function toggleCollapse(panelId,chevId){
   c.style.transform=open?'rotate(180deg)':'rotate(0deg)';
 }
 
-function setHs(flight,val){[...S.arr,...S.dep].forEach(f=>{if(f.flight===flight)f.hsMode=val;});renderPreview();}
+function setHs(flight,val){
+  [...S.arr,...S.dep,...S.excluded].forEach(f=>{
+    if(f.flight===flight) f.hsMode=val;
+  });
+  renderPreview();
+}
 function setWfs(flight,mode){[...S.arr,...S.dep].forEach(f=>{if(f.flight===flight)f.wfsMode=mode;});renderPreview();}
 
 // ── Ajout manuel ─────────────────────────────────────────────────
