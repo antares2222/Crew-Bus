@@ -117,7 +117,7 @@ textarea:focus{border-color:#e8b84b}
   .pb-sep-r{border-right:4pt solid black !important}
   .psh{font-weight:bold;font-size:9pt;text-align:center;padding:5pt;border:1pt solid black}
   .crossed{background:repeating-linear-gradient(45deg,#ddd,#ddd 1pt,white 1pt,white 4pt);}
-  table.pb tr{height:24pt}
+  table.pb tr{height:30pt}
 }
 </style>
 </head>
@@ -196,42 +196,48 @@ textarea:focus{border-color:#e8b84b}
     <div id="prevEx"></div>
   </div>
 
-  <!-- Ajout manuel -->
+  <!-- Headset — menu dépliable -->
   <div class="card">
-    <div class="fhdr" style="margin-bottom:12px">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;color:#e8b84b">+ AJOUTER UN VOL MANUELLEMENT</div>
-    </div>
-    <div class="type-grid">
-      <button class="tbtn sel-a" id="manTypeA" onclick="setManType('arr')">✈ ARRIVÉE</button>
-      <button class="tbtn" id="manTypeD" onclick="setManType('dep')">✈ DÉPART</button>
-    </div>
-    <div class="add-form-grid">
-      <div>
-        <div class="edit-lbl">VOL *</div>
-        <input type="text" id="manFlight" placeholder="ex: ICL601">
-      </div>
-      <div>
-        <div class="edit-lbl">HEURE (ETA/ETD) *</div>
-        <input type="text" id="manTime" placeholder="ex: 14:35">
-      </div>
-      <div>
-        <div class="edit-lbl">REGISTRATION</div>
-        <input type="text" id="manReg" placeholder="ex: 9HCAD">
-      </div>
-      <div>
-        <div class="edit-lbl">STAND</div>
-        <input type="text" id="manStand" placeholder="ex: 134">
+    <div class="fhdr" onclick="toggleCollapse('hsPanel','hsChev')" style="cursor:pointer;margin-bottom:0">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;color:#4be8a0">🎧 HEADSET</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="cnt"><b id="cHs">0</b> sélectionné(s)</div>
+        <span id="hsChev" style="color:#6b7280;font-size:16px;transition:transform .2s">▼</span>
       </div>
     </div>
-    <div style="margin-bottom:8px">
-      <div class="edit-lbl">HANDLER</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
-        <button class="wfs-btn" id="hWFS" onclick="setManHandler('WFS')">WFS</button>
-        <button class="wfs-btn" id="hCHAL" onclick="setManHandler('CHALLENGE')">CHALLENGE</button>
-        <button class="wfs-btn" id="hSWP" onclick="setManHandler('SWISSPORT')">SWISSPORT</button>
-      </div>
+    <div id="hsPanel" style="display:none;margin-top:12px">
+      <div style="font-size:11px;color:#6b7280;font-family:'DM Mono',monospace;margin-bottom:8px">Vols DEP dans la fenêtre — ETD directe</div>
+      <div id="hsList"></div>
     </div>
-    <button class="btn bp" onclick="addManual()" style="font-size:14px;padding:12px">+ AJOUTER CE VOL</button>
+  </div>
+
+  <!-- Ajout manuel — menu dépliable -->
+  <div class="card">
+    <div class="fhdr" onclick="toggleCollapse('manPanel','manChev')" style="cursor:pointer;margin-bottom:0">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;color:#e8b84b">+ AJOUTER UN VOL</div>
+      <span id="manChev" style="color:#6b7280;font-size:16px;transition:transform .2s">▼</span>
+    </div>
+    <div id="manPanel" style="display:none;margin-top:12px">
+      <div class="type-grid">
+        <button class="tbtn sel-a" id="manTypeA" onclick="setManType('arr')">✈ ARRIVÉE</button>
+        <button class="tbtn" id="manTypeD" onclick="setManType('dep')">✈ DÉPART</button>
+      </div>
+      <div class="add-form-grid">
+        <div><div class="edit-lbl">VOL *</div><input type="text" id="manFlight" placeholder="ex: ICL601"></div>
+        <div><div class="edit-lbl">HEURE (ETA/ETD) *</div><input type="text" id="manTime" placeholder="ex: 14:35"></div>
+        <div><div class="edit-lbl">REGISTRATION</div><input type="text" id="manReg" placeholder="ex: 9HCAD"></div>
+        <div><div class="edit-lbl">STAND</div><input type="text" id="manStand" placeholder="ex: 134"></div>
+      </div>
+      <div style="margin-bottom:8px">
+        <div class="edit-lbl">HANDLER</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+          <button class="wfs-btn" id="hWFS" onclick="setManHandler('WFS')">WFS</button>
+          <button class="wfs-btn" id="hCHAL" onclick="setManHandler('CHALLENGE')">CHALLENGE</button>
+          <button class="wfs-btn" id="hSWP" onclick="setManHandler('SWISSPORT')">SWISSPORT</button>
+        </div>
+      </div>
+      <button class="btn bp" onclick="addManual()" style="font-size:14px;padding:12px">+ AJOUTER CE VOL</button>
+    </div>
   </div>
 
   <button class="btn bg" onclick="genPDF()" style="margin-bottom:8px">🖨 GÉNÉRER LA FEUILLE PDF</button>
@@ -424,7 +430,20 @@ function editField(flight,field,val){
 }
 
 // ── WFS mode ─────────────────────────────────────────────────────
-function setHs(flight,val){[...S.arr,...S.dep].forEach(f=>{if(f.flight===flight)f.hsMode=val;});renderPreview();}
+function toggleCollapse(panelId,chevId){
+  const p=document.getElementById(panelId);
+  const c=document.getElementById(chevId);
+  const open=p.style.display==='none';
+  p.style.display=open?'block':'none';
+  c.style.transform=open?'rotate(180deg)':'rotate(0deg)';
+}
+
+function setHs(flight,val){
+  [...S.arr,...S.dep,...S.excluded].forEach(f=>{
+    if(f.flight===flight) f.hsMode=val;
+  });
+  renderPreview();
+}
 function setWfs(flight,mode){[...S.arr,...S.dep].forEach(f=>{if(f.flight===flight)f.wfsMode=mode;});renderPreview();}
 
 // ── Ajout manuel ─────────────────────────────────────────────────
@@ -517,10 +536,7 @@ function renderPreview(){
             <button class="rm-btn" onclick="removeVol('${f.flight}')">✕</button>
           </div>
         </div>
-        ${showHs?`<div class="wfs-toggle">
-          <button class="wfs-btn ${f.hsMode===true?'sel-hand':''}" onclick="setHs('${f.flight}',${f.hsMode?'false':'true'})">🎧 HS${f.hsMode?' ✓':''}</button>
-          ${isWfs?`<button class="wfs-btn ${f.wfsMode==='renting'?'sel-rent':''}" onclick="setWfs('${f.flight}','renting')">🚙 Renting</button><button class="wfs-btn ${f.wfsMode==='handling'?'sel-hand':''}" onclick="setWfs('${f.flight}','handling')">✈️ Handling</button>`:''}
-        </div>`:''}
+        ${isWfs?`<div class="wfs-toggle"><button class="wfs-btn ${f.wfsMode==='renting'?'sel-rent':''}" onclick="setWfs('${f.flight}','renting')">🚙 Renting</button><button class="wfs-btn ${f.wfsMode==='handling'?'sel-hand':''}" onclick="setWfs('${f.flight}','handling')">✈️ Handling</button></div>`:''}
       </div>`;
     });
   }
@@ -552,6 +568,37 @@ function renderPreview(){
   } else {
     excCard.style.display='none';
   }
+
+  // ── Liste Headset : tous les DEP dans la fenêtre horaire (sauf FedEx/Aviapartner) ──
+  // Inclut les vols du tableau principal + les exclus DEP
+  const allDepForHs=[
+    ...S.dep,
+    ...S.excluded.filter(f=>f.type==='dep')
+  ];
+  const hsCount=allDepForHs.filter(f=>f.hsMode===true).length;
+  document.getElementById('cHs').textContent=hsCount;
+
+  let hsList='';
+  if(allDepForHs.length===0){
+    hsList=`<div style="color:#6b7280;font-size:12px;text-align:center;padding:10px">Aucun vol DEP disponible</div>`;
+  } else {
+    allDepForHs.forEach(f=>{
+      const sel=f.hsMode===true;
+      hsList+=`<div class="fi" style="border-left:3px solid ${sel?'#4be8a0':'#2a2d36'};background:${sel?'rgba(75,232,160,.06)':'#111318'};margin-bottom:5px">
+        <div class="fi-top">
+          <div class="fi-t" style="font-size:18px;color:#e8b84b">${f.eta}<div class="fi-etd">ETD</div></div>
+          <div class="fi-b">
+            <div class="fi-f" style="font-size:12px">${f.flight}</div>
+            <div class="fi-r">${f.reg||'—'} · ${f.handler||'—'}${f.stand?' · Stand '+f.stand:''}</div>
+          </div>
+          <button class="wfs-btn ${sel?'sel-hand':''}" onclick="setHs('${f.flight}',${sel?'false':'true'})" style="white-space:nowrap">
+            🎧 ${sel?'Retiré ✓':'Ajouter'}
+          </button>
+        </div>
+      </div>`;
+    });
+  }
+  document.getElementById('hsList').innerHTML=hsList;
 }
 
 // ── Generate PDF ──────────────────────────────────────────────────
@@ -572,8 +619,9 @@ function genPDF(){
   const emptyCount=Math.max(0,totalFit-dataRows);
   for(let i=0;i<emptyCount;i++){rows+=`<tr class="per"><td></td><td></td><td class="col-arr">ARR</td><td class="col-pup">Pick up</td><td></td><td></td><td></td></tr>`;}
   document.getElementById('sh-rows').innerHTML=rows;
-  // Vols HS (départs WFS ou SWISSPORT avec hsMode=true)
-  const hsFlights=S.dep.filter(f=>f.hsMode===true);
+  // Vols HS : tous DEP avec hsMode=true (tableau principal + exclus)
+  const allDepForHs=[...S.dep,...S.excluded.filter(f=>f.type==='dep')];
+  const hsFlights=allDepForHs.filter(f=>f.hsMode===true);
   const rentingFlights=[...S.arr,...S.dep].filter(f=>f.handler.toUpperCase()==='WFS'&&f.wfsMode==='renting');
   // Dédupliquer renting : une seule entrée par registration ET par numéro de vol
   const rentingSeen=new Set();
