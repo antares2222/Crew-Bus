@@ -88,11 +88,16 @@ textarea:focus{border-color:#e8b84b}
 
 /* PRINT */
 #sheet{display:none}
+#sheetOps{display:none}
 @media print{
-  #sheet{display:block}
-  body>*:not(#sheet){display:none!important}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{background:white;color:black;padding:0;font-family:Arial,sans-serif;font-size:10pt}
+  /* Par défaut : cacher tout sauf #sheet */
+  .header,.sec,#sheetOps{display:none!important}
+  #sheet{display:block!important}
+  /* Quand on imprime les opérations : inverser */
+  #sheet.no-print{display:none!important}
+  #sheetOps.do-print{display:block!important}
   @page{size:A4 portrait;margin:10mm}
   .ph{display:flex;align-items:stretch;border:1.5pt solid black;margin-bottom:0}
   .ph-l{flex:1;padding:6pt 10pt;font-size:11pt}
@@ -130,6 +135,7 @@ textarea:focus{border-color:#e8b84b}
     <div class="dot on" id="d0"></div>
     <div class="dot" id="d1"></div>
     <div class="dot" id="d2"></div>
+    <div class="dot" id="d3"></div>
   </div>
 </div>
 
@@ -176,7 +182,7 @@ textarea:focus{border-color:#e8b84b}
 
 <!-- STEP 2 -->
 <div class="sec" id="s2">
-  <div class="lbl">03 — VÉRIFICATION</div>
+  <div class="lbl">03 — VÉRIFICATION CREW-BUS</div>
 
   <!-- Vols détectés -->
   <div class="card">
@@ -241,10 +247,94 @@ textarea:focus{border-color:#e8b84b}
   </div>
 
   <button class="btn bg" onclick="genPDF()" style="margin-bottom:8px">🖨 GÉNÉRER LA FEUILLE PDF</button>
+  <button class="btn bp" onclick="buildOps();go(3)" style="margin-bottom:8px">SUIVANT — VÉRIFICATION OPÉRATION →</button>
   <div class="brow">
     <button class="btn bs" onclick="go(1)">← RETOUR</button>
     <button class="btn bs" onclick="reset()">RECOMMENCER</button>
   </div>
+</div>
+
+<!-- STEP 3 — Vérification Opération -->
+<div class="sec" id="s3">
+  <div class="lbl">04 — VÉRIFICATION OPÉRATION</div>
+
+  <!-- CATERING -->
+  <div class="card">
+    <div class="fhdr" style="margin-bottom:10px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;color:#e8b84b">✈ CATERING</div>
+      <div class="cnt">DEP <b id="cCat">0</b></div>
+    </div>
+    <div id="catList"></div>
+    <!-- Menu dépliable ajout catering -->
+    <div style="margin-top:10px">
+      <div onclick="toggleCollapse('catPanel','catChev')" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid #2a2d36">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:#6b7280">+ AJOUTER / SUPPRIMER UN VOL</span>
+        <span id="catChev" style="color:#6b7280;transition:transform .2s">▼</span>
+      </div>
+      <div id="catPanel" style="display:none">
+        <div id="catAllList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPERATION -->
+  <div class="card">
+    <div class="fhdr" style="margin-bottom:10px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;color:#4be8a0">🔧 OPÉRATION</div>
+      <div class="cnt">ARR <b id="cOps">0</b></div>
+    </div>
+    <div id="opsList"></div>
+    <!-- Menu dépliable ajout opération -->
+    <div style="margin-top:10px">
+      <div onclick="toggleCollapse('opsPanel','opsChev')" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid #2a2d36">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:#6b7280">+ AJOUTER / SUPPRIMER UN VOL</span>
+        <span id="opsChev" style="color:#6b7280;transition:transform .2s">▼</span>
+      </div>
+      <div id="opsPanel" style="display:none">
+        <div id="opsAllList"></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn bg" onclick="genPDFOps()" style="margin-bottom:8px">🖨 GÉNÉRER PAGE OPÉRATION</button>
+  <div class="brow">
+    <button class="btn bs" onclick="go(2)">← RETOUR</button>
+    <button class="btn bs" onclick="reset()">RECOMMENCER</button>
+  </div>
+</div>
+
+<!-- FEUILLE PRINT OPS (page 2) -->
+<div id="sheetOps">
+  <div class="ph">
+    <div class="ph-l" id="shOps-date"></div>
+    <div class="ph-m"></div>
+    <div class="ph-r"></div>
+  </div>
+  <!-- Catering table -->
+  <div style="font-family:Arial;font-size:9pt;font-weight:bold;padding:4pt 0 2pt;letter-spacing:1pt">CATERING</div>
+  <table class="pt">
+    <thead><tr>
+      <th style="width:16%">Registration</th>
+      <th style="width:18%">Flight Number</th>
+      <th style="width:18%">Up Lift (ETD-1h30)</th>
+      <th style="width:18%">ETD</th>
+      <th style="width:30%">Note</th>
+    </tr></thead>
+    <tbody id="shOps-cat"></tbody>
+  </table>
+  <br>
+  <!-- Operations table -->
+  <div style="font-family:Arial;font-size:9pt;font-weight:bold;padding:4pt 0 2pt;letter-spacing:1pt">OPÉRATION</div>
+  <table class="pt">
+    <thead><tr>
+      <th style="width:16%">Registration</th>
+      <th style="width:18%">Flight Number</th>
+      <th style="width:14%">ETA</th>
+      <th style="width:10%">Stand</th>
+      <th style="width:42%">Tâche</th>
+    </tr></thead>
+    <tbody id="shOps-ops"></tbody>
+  </table>
 </div>
 
 <!-- FEUILLE PRINT -->
@@ -295,7 +385,11 @@ let manType='arr', manHandler='';
 
 document.getElementById('sDate').value=new Date().toISOString().slice(0,10);
 
-function go(n){document.querySelectorAll('.sec').forEach((s,i)=>s.classList.toggle('show',i===n));document.querySelectorAll('.dot').forEach((d,i)=>{d.classList.toggle('on',i===n);d.classList.toggle('done',i<n);});window.scrollTo(0,0);}
+function go(n){
+  document.querySelectorAll('.sec').forEach((s,i)=>s.classList.toggle('show',i===n));
+  document.querySelectorAll('.dot').forEach((d,i)=>{d.classList.toggle('on',i===n);d.classList.toggle('done',i<n);});
+  window.scrollTo(0,0);
+}
 function selShift(s,el){S.shift=s;document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
 function reset(){S.arr=[];S.dep=[];S.excluded=[];document.getElementById('tFids').value='';go(0);}
 
@@ -661,6 +755,244 @@ function genPDF(){
   }
   document.getElementById('sh-bottom-rows').innerHTML=bottomRows;
   window.print();
+}
+
+// ══ OPERATIONS LOGIC ════════════════════════════════════════════
+
+// State for ops
+const OPS = { catering:[], operations:[] };
+
+// Catering prefix defaults
+const CAT_DEFAULT = ['ETH','QTR','LHA'];
+// Ops defaults: {handler, prefixes[]} — empty prefix = all
+const OPS_DEFAULT = [
+  {handler:'WFS', exclude:['SVA'], prefixes:[]},
+  {handler:'CHALLENGE', prefixes:['AAE','CHG','ABD','ICL']},
+  {handler:'SWISSPORT', prefixes:['GTI','TAY','YZR','LHA']},
+];
+
+function flightPrefix(flight){return flight.replace(/\d.*$/,'');}
+
+function uplift(etd){
+  const[h,m]=etd.split(':').map(Number);
+  let x=h*60+m-90;if(x<0)x+=1440;
+  return String(Math.floor(x/60)%24).padStart(2,'0')+':'+String(x%60).padStart(2,'0');
+}
+
+// Window for catering: shift -1h to shift +2h
+function inCateringWindow(etd){
+  if(!etd||!/^\d{1,2}:\d{2}$/.test(etd))return false;
+  const[h,m]=etd.split(':').map(Number),mins=h*60+m;
+  let start,end;
+  if(S.shift==='NIGHT'){start=21*60;end=8*60;}       // 21h-08h
+  else if(S.shift==='EARLY'){start=5*60;end=16*60;}  // 05h-16h
+  else{start=13*60;end=24*60;}                        // 13h-24h (LATE)
+  if(start<end) return mins>=start&&mins<end;
+  return mins>=start||mins<end;
+}
+
+function isOpsDefault(f){
+  const hw=f.handler.toUpperCase();
+  const pfx=flightPrefix(f.flight.toUpperCase());
+  for(const rule of OPS_DEFAULT){
+    if(rule.handler!==hw)continue;
+    if(rule.exclude&&rule.exclude.some(e=>f.flight.toUpperCase().startsWith(e)))continue;
+    if(!rule.prefixes||rule.prefixes.length===0)return true;
+    if(rule.prefixes.some(p=>f.flight.toUpperCase().startsWith(p)))return true;
+  }
+  return false;
+}
+
+function buildOps(){
+  // All DEP flights (included + excluded) within catering window
+  const allDep=[...S.dep,...S.excluded.filter(f=>f.type==='dep')];
+  const allDepCat=allDep.filter(f=>inCateringWindow(f.eta));
+
+  // Catering: default = ETH, QTR, LHA prefix
+  allDepCat.forEach(f=>{
+    const pfx=flightPrefix(f.flight.toUpperCase());
+    const existing=OPS.catering.find(c=>c.flight===f.flight&&c.eta===f.eta);
+    if(!existing){
+      OPS.catering.push({...f, selected: CAT_DEFAULT.some(p=>f.flight.toUpperCase().startsWith(p))});
+    }
+  });
+
+  // Operations: all ARR flights
+  const allArr=[...S.arr,...S.excluded.filter(f=>f.type==='arr')];
+  allArr.forEach(f=>{
+    const existing=OPS.operations.find(o=>o.flight===f.flight&&o.eta===f.eta);
+    if(!existing){
+      OPS.operations.push({...f, selected: isOpsDefault(f), tasks:{cleaning:false,toilet:false,water:false}});
+    }
+  });
+
+  renderOps();
+}
+
+function renderOps(){
+  // ── Catering ──
+  const selCat=OPS.catering.filter(f=>f.selected);
+  document.getElementById('cCat').textContent=selCat.length;
+
+  let catHtml='';
+  selCat.forEach(f=>{
+    catHtml+=`<div class="fi d" style="margin-bottom:5px">
+      <div class="fi-top">
+        <div class="fi-t" style="font-size:16px">${f.eta}</div>
+        <div class="fi-b">
+          <div class="fi-f">${f.flight}</div>
+          <div class="fi-r">${f.reg||'—'}${f.stand?' · Stand '+f.stand:''}</div>
+        </div>
+        <button class="rm-btn" onclick="toggleCat('${f.flight}','${f.eta}',false)">✕</button>
+      </div>
+    </div>`;
+  });
+  if(!catHtml)catHtml=`<div style="color:#6b7280;font-size:12px;padding:8px">Aucun vol sélectionné</div>`;
+  document.getElementById('catList').innerHTML=catHtml;
+
+  // All dep for catering menu
+  let catAllHtml='';
+  OPS.catering.forEach(f=>{
+    const sel=f.selected;
+    catAllHtml+=`<div class="fi" style="border-left:3px solid ${sel?'#e8b84b':'#2a2d36'};background:${sel?'rgba(232,184,75,.04)':'#111318'};margin-bottom:4px">
+      <div class="fi-top">
+        <div class="fi-t" style="font-size:16px;color:#e8b84b">${f.eta}</div>
+        <div class="fi-b">
+          <div class="fi-f" style="font-size:12px">${f.flight}</div>
+          <div class="fi-r">${f.reg||'—'} · ${f.handler}</div>
+        </div>
+        <button class="wfs-btn ${sel?'sel-hand':''}" onclick="toggleCat('${f.flight}','${f.eta}',${!sel})">
+          ${sel?'✕ Retirer':'+ Ajouter'}
+        </button>
+      </div>
+    </div>`;
+  });
+  if(!catAllHtml)catAllHtml=`<div style="color:#6b7280;font-size:12px;padding:8px">Aucun vol DEP disponible</div>`;
+  document.getElementById('catAllList').innerHTML=catAllHtml;
+
+  // ── Operations ──
+  const selOps=OPS.operations.filter(f=>f.selected);
+  document.getElementById('cOps').textContent=selOps.length;
+
+  let opsHtml='';
+  selOps.forEach(f=>{
+    const t=f.tasks||{};
+    const isExtra=!isOpsDefault(f);
+    opsHtml+=`<div class="fi a" style="margin-bottom:5px">
+      <div class="fi-top">
+        <div class="fi-t" style="font-size:16px">${f.time}</div>
+        <div class="fi-b">
+          <div class="fi-f">${f.flight}</div>
+          <div class="fi-r">${f.reg||'—'}${f.stand?' · Stand '+f.stand:''} · ${f.handler}</div>
+        </div>
+        <button class="rm-btn" onclick="toggleOps('${f.flight}','${f.eta}',false)">✕</button>
+      </div>
+      ${isExtra?`<div class="wfs-toggle" style="flex-wrap:wrap;gap:4px">
+        <button class="wfs-btn ${t.cleaning?'sel-hand':''}" onclick="toggleTask('${f.flight}','${f.eta}','cleaning')">🧹 Cleaning</button>
+        <button class="wfs-btn ${t.toilet?'sel-hand':''}" onclick="toggleTask('${f.flight}','${f.eta}','toilet')">🚽 Toilet</button>
+        <button class="wfs-btn ${t.water?'sel-hand':''}" onclick="toggleTask('${f.flight}','${f.eta}','water')">💧 Water</button>
+      </div>`:''}
+    </div>`;
+  });
+  if(!opsHtml)opsHtml=`<div style="color:#6b7280;font-size:12px;padding:8px">Aucun vol sélectionné</div>`;
+  document.getElementById('opsList').innerHTML=opsHtml;
+
+  // All arr for ops menu
+  let opsAllHtml='';
+  OPS.operations.forEach(f=>{
+    const sel=f.selected;
+    opsAllHtml+=`<div class="fi" style="border-left:3px solid ${sel?'#4be8a0':'#2a2d36'};background:${sel?'rgba(75,232,160,.04)':'#111318'};margin-bottom:4px">
+      <div class="fi-top">
+        <div class="fi-t" style="font-size:16px;color:#e8b84b">${f.time}</div>
+        <div class="fi-b">
+          <div class="fi-f" style="font-size:12px">${f.flight}</div>
+          <div class="fi-r">${f.reg||'—'} · ${f.handler}</div>
+        </div>
+        <button class="wfs-btn ${sel?'sel-hand':''}" onclick="toggleOps('${f.flight}','${f.eta}',${!sel})">
+          ${sel?'✕ Retirer':'+ Ajouter'}
+        </button>
+      </div>
+    </div>`;
+  });
+  if(!opsAllHtml)opsAllHtml=`<div style="color:#6b7280;font-size:12px;padding:8px">Aucun vol ARR disponible</div>`;
+  document.getElementById('opsAllList').innerHTML=opsAllHtml;
+}
+
+function toggleCat(flight,eta,val){
+  const f=OPS.catering.find(c=>c.flight===flight&&c.eta===eta);
+  if(f)f.selected=val;
+  renderOps();
+}
+function toggleOps(flight,eta,val){
+  const f=OPS.operations.find(o=>o.flight===flight&&o.eta===eta);
+  if(f)f.selected=val;
+  renderOps();
+}
+function toggleTask(flight,eta,task){
+  const f=OPS.operations.find(o=>o.flight===flight&&o.eta===eta);
+  if(!f)return;
+  if(!f.tasks)f.tasks={cleaning:false,toilet:false,water:false};
+  f.tasks[task]=!f.tasks[task];
+  renderOps();
+}
+function getTaskLabel(tasks){
+  if(!tasks)return'';
+  const{cleaning,toilet,water}=tasks;
+  if(cleaning&&toilet&&water)return'FTS';
+  const list=[];
+  if(cleaning)list.push('CLEANING');
+  if(toilet)list.push('TOILET');
+  if(water)list.push('WATER');
+  return list.join(' / ');
+}
+
+function genPDFOps(){
+  const dateVal=document.getElementById('sDate').value;
+  const dl=dateVal?dateVal.split('-').reverse().join('/'):'—';
+  document.getElementById('shOps-date').textContent='Opération   '+dl+'   '+S.shift;
+
+  // Catering rows
+  const selCat=OPS.catering.filter(f=>f.selected).sort((a,b)=>a.eta.localeCompare(b.eta));
+  let catRows='';
+  selCat.forEach(f=>{
+    catRows+=`<tr>
+      <td class="font-lg">${f.reg||''}</td>
+      <td class="font-lg">${f.flight}</td>
+      <td class="font-lg">${uplift(f.eta)}</td>
+      <td class="font-lg">${f.eta}</td>
+      <td></td>
+    </tr>`;
+  });
+  // Empty rows to fill
+  for(let i=selCat.length;i<8;i++){
+    catRows+=`<tr class="per"><td></td><td></td><td></td><td></td><td></td></tr>`;
+  }
+  document.getElementById('shOps-cat').innerHTML=catRows;
+
+  // Operations rows
+  const selOps=OPS.operations.filter(f=>f.selected).sort((a,b)=>a.time.localeCompare(b.time));
+  let opsRows='';
+  selOps.forEach(f=>{
+    const task=isOpsDefault(f)?'':getTaskLabel(f.tasks);
+    opsRows+=`<tr>
+      <td class="font-lg">${f.reg||''}</td>
+      <td class="font-lg">${f.flight}</td>
+      <td class="font-lg">${f.time}</td>
+      <td class="font-lg">${f.stand||''}</td>
+      <td style="font-size:10pt;font-weight:bold">${task}</td>
+    </tr>`;
+  });
+  for(let i=selOps.length;i<8;i++){
+    opsRows+=`<tr class="per"><td></td><td></td><td></td><td></td><td></td></tr>`;
+  }
+  document.getElementById('shOps-ops').innerHTML=opsRows;
+
+  // Show only ops sheet
+  document.getElementById('sheet').classList.add('no-print');
+  document.getElementById('sheetOps').classList.add('do-print');
+  window.print();
+  document.getElementById('sheet').classList.remove('no-print');
+  document.getElementById('sheetOps').classList.remove('do-print');
 }
 </script>
 </body>
