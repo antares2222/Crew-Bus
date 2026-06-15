@@ -791,6 +791,18 @@ function inCateringWindow(etd){
   return mins>=start||mins<end;
 }
 
+// Window for operations: shift -35min to end of shift
+function inOpsWindow(eta){
+  if(!eta||!/^\d{1,2}:\d{2}$/.test(eta))return false;
+  const[h,m]=eta.split(':').map(Number),mins=h*60+m;
+  let start,end;
+  if(S.shift==='NIGHT'){start=21*60+25;end=6*60;}    // 21h25-06h
+  else if(S.shift==='EARLY'){start=5*60+25;end=14*60;}// 05h25-14h
+  else{start=13*60+25;end=22*60;}                     // 13h25-22h (LATE)
+  if(start<end) return mins>=start&&mins<end;
+  return mins>=start||mins<end;
+}
+
 function isOpsDefault(f){
   const hw=f.handler.toUpperCase();
   const pfx=flightPrefix(f.flight.toUpperCase());
@@ -817,9 +829,9 @@ function buildOps(){
     }
   });
 
-  // Operations: all ARR flights
+  // Operations: ARR flights within shift -35min window
   const allArr=[...S.arr,...S.excluded.filter(f=>f.type==='arr')];
-  allArr.forEach(f=>{
+  allArr.filter(f=>inOpsWindow(f.eta)).forEach(f=>{
     const existing=OPS.operations.find(o=>o.flight===f.flight&&o.eta===f.eta);
     if(!existing){
       OPS.operations.push({...f, selected: isOpsDefault(f), tasks:{cleaning:false,toilet:false,water:false}});
@@ -963,8 +975,8 @@ function genPDFOps(){
       <td></td>
     </tr>`;
   });
-  // Empty rows to fill
-  for(let i=selCat.length;i<8;i++){
+  // Empty rows = nb vols + 2
+  for(let i=0;i<2;i++){
     catRows+=`<tr class="per"><td></td><td></td><td></td><td></td><td></td></tr>`;
   }
   document.getElementById('shOps-cat').innerHTML=catRows;
@@ -982,17 +994,22 @@ function genPDFOps(){
       <td style="font-size:10pt;font-weight:bold">${task}</td>
     </tr>`;
   });
-  for(let i=selOps.length;i<8;i++){
+  // Empty rows = nb vols + 2
+  for(let i=0;i<2;i++){
     opsRows+=`<tr class="per"><td></td><td></td><td></td><td></td><td></td></tr>`;
   }
   document.getElementById('shOps-ops').innerHTML=opsRows;
 
-  // Show only ops sheet
+  // Show only ops sheet — délai pour Safari iOS
   document.getElementById('sheet').classList.add('no-print');
   document.getElementById('sheetOps').classList.add('do-print');
-  window.print();
-  document.getElementById('sheet').classList.remove('no-print');
-  document.getElementById('sheetOps').classList.remove('do-print');
+  setTimeout(()=>{
+    window.print();
+    setTimeout(()=>{
+      document.getElementById('sheet').classList.remove('no-print');
+      document.getElementById('sheetOps').classList.remove('do-print');
+    }, 500);
+  }, 300);
 }
 </script>
 </body>
