@@ -151,6 +151,10 @@ textarea:focus{border-color:#e8b84b}
   .col-pup{width:8%;text-align:center;font-weight:bold;font-size:9pt}
   .col-time{width:10%;font-size:16pt;letter-spacing:1pt;text-align:center}.col-note{width:28%}.col-stand{width:7%;text-align:center}
   .font-lg{font-size:12pt}
+  /* Registration same size as flight number */
+  .col-reg.font-lg{font-size:12pt}
+  table.pt td{border:1pt solid black;padding:3pt 5pt;vertical-align:middle;height:8mm}
+  .per{height:8mm}.per td{border:1pt solid black}
   .badge-arr{display:inline-block;border:1.5pt solid #2d7a2d;border-radius:3pt;padding:1pt 4pt;font-size:7pt;font-weight:bold;background:#d4edda;color:#1a5c1a}
   .badge-pup{display:inline-block;border:1.5pt solid #c0392b;border-radius:3pt;padding:1pt 5pt;font-size:8pt;font-style:italic;background:#fde8e8;color:#7b1010;white-space:nowrap}
   .psep td{background:#f0f0f0;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt;border:1pt solid black}
@@ -304,12 +308,12 @@ textarea:focus{border-color:#e8b84b}
 <!-- STEP 1 -->
 <div class="sec" id="s1">
   <div class="lbl">02 — COLLER LES VOLS</div>
-  <div class="tip">
-    <strong>📋 Comment faire :</strong><br>
+  <div class="tip" style="font-size:14px;line-height:1.9">
+    <strong style="font-size:15px">⚠️ Attention</strong><br>
     1. Ouvre <strong>fids.liegeairport.com/spw</strong><br>
-    2. Attends que tous les vols chargent<br>
-    3. Sélectionne tout → <strong>Copier</strong><br>
-    4. Colle ici ↓
+    2. Sélectionne <strong>Local Time</strong><br>
+    3. Copie les vols <strong>2 à 3h avant et après le shift</strong><br>
+    4. Colle ci-dessous ↓
   </div>
   <div class="card">
     <label>TEXTE COPIÉ DEPUIS LE FIDS</label>
@@ -621,7 +625,7 @@ function shouldInclude(flight,raw){
 function canPropose(raw){
   if(!raw)return false;
   const r=raw.toUpperCase().trim();
-  if(r==='FEDEX'||r==='AVIAPARTNER')return false;
+  if(r==='FEDEX')return false;
   return true;
 }
 
