@@ -63,7 +63,7 @@ label{display:block;font-size:10px;color:#6b7280;letter-spacing:1px;margin-botto
 input[type=date]{width:100%;background:#0a0a0a;border:1px solid #2a2d36;border-radius:8px;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:14px;padding:11px 12px;outline:none;-webkit-appearance:none}
 input[type=text]{width:100%;background:#0a0a0a;border:1px solid #2a2d36;border-radius:8px;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:14px;padding:10px 12px;outline:none;-webkit-appearance:none}
 input:focus{border-color:#e8b84b}
-textarea{width:100%;background:#0a0a0a;border:1px solid #2a2d36;border-radius:8px;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:12px;padding:12px;outline:none;resize:none;min-height:220px;line-height:1.7}
+textarea{width:100%;background:#0a0a0a;border:1px solid #2a2d36;border-radius:8px;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:15px;padding:12px;outline:none;resize:none;min-height:240px;line-height:1.7}
 textarea:focus{border-color:#e8b84b}
 .sgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .sbtn{border:1px solid #2a2d36;border-radius:8px;background:#0a0a0a;color:#6b7280;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;padding:13px 4px;cursor:pointer;width:100%;text-align:center;transition:all .2s}
@@ -146,15 +146,11 @@ textarea:focus{border-color:#e8b84b}
   table.pt{width:100%;border-collapse:collapse}
   table.pt th{font-size:8pt;font-weight:bold;text-align:center;border:1pt solid black;padding:4pt 3pt;font-variant:small-caps}
   table.pt td{border:1pt solid black;padding:4pt 5pt;vertical-align:middle;height:10mm}
+  .font-lg{font-size:14pt}
   .col-reg{width:13%}.col-flt{width:13%}
   .col-arr{width:7%;text-align:center;font-size:8pt;font-weight:bold}
   .col-pup{width:8%;text-align:center;font-weight:bold;font-size:9pt}
-  .col-time{width:10%;font-size:16pt;letter-spacing:1pt;text-align:center}.col-note{width:28%}.col-stand{width:7%;text-align:center}
-  .font-lg{font-size:12pt}
-  /* Registration same size as flight number */
-  .col-reg.font-lg{font-size:12pt}
-  table.pt td{border:1pt solid black;padding:3pt 5pt;vertical-align:middle;height:8mm}
-  .per{height:8mm}.per td{border:1pt solid black}
+  .col-time{width:10%;font-size:18pt;letter-spacing:1pt;text-align:center}.col-note{width:28%}.col-stand{width:7%;text-align:center}
   .badge-arr{display:inline-block;border:1.5pt solid #2d7a2d;border-radius:3pt;padding:1pt 4pt;font-size:7pt;font-weight:bold;background:#d4edda;color:#1a5c1a}
   .badge-pup{display:inline-block;border:1.5pt solid #c0392b;border-radius:3pt;padding:1pt 5pt;font-size:8pt;font-style:italic;background:#fde8e8;color:#7b1010;white-space:nowrap}
   .psep td{background:#f0f0f0;font-size:7pt;font-weight:bold;letter-spacing:2pt;text-align:center;padding:2pt;border:1pt solid black}
@@ -308,12 +304,12 @@ textarea:focus{border-color:#e8b84b}
 <!-- STEP 1 -->
 <div class="sec" id="s1">
   <div class="lbl">02 — COLLER LES VOLS</div>
-  <div class="tip" style="font-size:14px;line-height:1.9">
-    <strong style="font-size:15px">⚠️ Attention</strong><br>
-    1. Ouvre <strong>fids.liegeairport.com/spw</strong><br>
-    2. Sélectionne <strong>Local Time</strong><br>
-    3. Copie les vols <strong>2 à 3h avant et après le shift</strong><br>
-    4. Colle ci-dessous ↓
+  <div class="tip">
+    <strong>⚠️ Attention :</strong><br>
+    1. OUVRIR <strong>fids.liegeairport.com/spw</strong><br>
+    2. SÉLECTIONNER <strong>Local Time</strong><br>
+    3. COPIER LES VOLS <strong>2 à 3 heures</strong> avant et après le shift<br>
+    4. COLLER ci-dessous ↓
   </div>
   <div class="card">
     <label>TEXTE COPIÉ DEPUIS LE FIDS</label>
@@ -625,7 +621,7 @@ function shouldInclude(flight,raw){
 function canPropose(raw){
   if(!raw)return false;
   const r=raw.toUpperCase().trim();
-  if(r==='FEDEX')return false;
+  if(r==='FEDEX'||r==='AVIAPARTNER')return false;
   return true;
 }
 
